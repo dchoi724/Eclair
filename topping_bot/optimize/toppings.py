@@ -13,6 +13,8 @@ class Resonance(Enum):
     SEA_SALT = "Sea Salt"
     RADIANT_CHEESE = "Radiant Cheese"
     FROSTED_CRYSTAL = "Frosted Crystal"
+    LIFESPROUTING = "Life-sprouting"
+    DESTRUCTIVE = "Destructive"
 
 
 class Type(Enum):
