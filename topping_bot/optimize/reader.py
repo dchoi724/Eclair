@@ -241,18 +241,21 @@ def extract_topping_data(unique_frames: Iterable[np.ndarray], debug=False, verbo
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         threshold, frame = cv2.threshold(frame, 180, 255, cv2.THRESH_BINARY)
 
-        topping_info = frame[750:1220, 140:]
+        #  crop img of all substats rows (vertical range, horizontal range)
+        topping_info = frame[750:1350, 200:] 
 
-        main = frame[740:847]
+        # crop img of the main stat line
+        main = frame[740:850]
+
         flavor, value = image_to_substat(main[:, :1430], "flavor"), image_to_decimal(main[:, 1430:])
         if flavor is None or value is None or value == "0":
             continue
 
         substats = [(flavor, value)]
-        substats_info = topping_info[140:]
+        substats_info = topping_info[150:]
 
         for j in range(3):
-            line = substats_info[125 * j : 125 * j + 80]
+            line = substats_info[150 * j : 150 * j + 150]
             substat, value = image_to_substat(line[:, 10:1345], "substat"), image_to_decimal(line[:, 1345:])
 
             if substat is None or value is None:
