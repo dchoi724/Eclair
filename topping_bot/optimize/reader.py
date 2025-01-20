@@ -265,15 +265,13 @@ def extract_topping_data(unique_frames: Iterable[np.ndarray], debug=False, verbo
 
         # Resonance check
         if substats:
-            resonant_indicator_roi = frame[235:315, 1070:1160]
-
+            resonant_indicator_roi = frame[235:325, 1180:1270]
             h, w = resonant_indicator_roi.shape
             if np.count_nonzero(resonant_indicator_roi == 0) / (h * w) < 0.5:
                 metatype = Resonance.NORMAL
             else:
                 # metatype check
-                title = frame[100:225, 200:-200]
-
+                title = frame[110:220, 200:-200]
                 active_pixels = np.stack(np.where(title == 0))
                 if active_pixels.size == 0:
                     return None
