@@ -91,6 +91,20 @@ TOPPINGS = {
         Type.CD: Image.open(TOPPING_PATH / "destructive" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
         Type.ATKSPD: Image.open(TOPPING_PATH / "destructive" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
         Type.CRIT: Image.open(TOPPING_PATH / "destructive" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
+    },
+    Resonance.FRAGRANT: {
+        Type.DMGRES: Image.open(TOPPING_PATH / "fragrant" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
+        Type.ATK: Image.open(TOPPING_PATH / "fragrant" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
+        Type.CD: Image.open(TOPPING_PATH / "fragrant" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
+        Type.ATKSPD: Image.open(TOPPING_PATH / "fragrant" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
+        Type.CRIT: Image.open(TOPPING_PATH / "fragrant" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
+    },
+    Resonance.IRIS_GEM: {
+        Type.DMGRES: Image.open(TOPPING_PATH / "iris" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
+        Type.ATK: Image.open(TOPPING_PATH / "iris" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
+        Type.CD: Image.open(TOPPING_PATH / "iris" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
+        Type.ATKSPD: Image.open(TOPPING_PATH / "iris" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
+        Type.CRIT: Image.open(TOPPING_PATH / "iris" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
     }
 }
 STATIC = {

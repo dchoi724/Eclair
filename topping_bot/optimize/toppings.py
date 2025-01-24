@@ -15,6 +15,8 @@ class Resonance(Enum):
     FROSTED_CRYSTAL = "Frosted Crystal"
     LIFESPROUTING = "Life-sprouting"
     DESTRUCTIVE = "Destructive"
+    FRAGRANT = "Fragrant"
+    IRIS_GEM = "Iris Gem"
 
 
 class Type(Enum):
