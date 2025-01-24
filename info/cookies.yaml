@@ -9,6 +9,8 @@ order:
   - Pinecone
   - Capsaicin
   - Mala Sauce
+  - White Lily
+  - Stormbringer
   - Wildberry
   - Icicle Yeti
   - Strawberry
@@ -54,6 +56,13 @@ order:
   - Affogato
   - Shining Glitter
   - Captain Caviar
+  - Elder Faerie
+  - Street Urchin
+  - Caramel Choux
+  - Butter Roll
+  - Matcha
+  - Mercurial Knight
+  - Silverbell
   - Pomegranate
   - Eclair
   - Moonlight
@@ -114,6 +123,14 @@ order:
   - BTS
   - Snapdragon
 cookies:
+  White Lily:
+    id: 509
+    rarity: Ancient
+    type: Bomber
+    position: Middle
+    cd: 15
+    aliases:
+      - WL
   Golden Cheese:
     id: 507
     rarity: Ancient
@@ -167,6 +184,14 @@ cookies:
       - PD
       - Pita
       - Pitaya
+  Stormbringer:
+    id: 600
+    rarity: Legendary
+    type: Charge
+    position: Front
+    cd: 13
+    aliases:
+      - SB
   Moonlight:
     id: 49
     rarity: Legendary
@@ -207,6 +232,13 @@ cookies:
       - Sea Salt
     aliases:
       - SF
+  Elder Faerie:
+    id: 596
+    rarity: Super Epic
+    type: Defense
+    position: Front
+    cd: 12
+    aliases: []
   Crimson Coral:
     id: 582
     rarity: Super Epic
@@ -285,6 +317,48 @@ cookies:
       - CC
       - Clotted
       - Clot
+  Street Urchin:
+    id: 599
+    rarity: Epic
+    type: Bomber
+    position: Middle
+    cd: 12
+    aliases: []
+  Caramel Choux:
+    id: 598
+    rarity: Epic
+    type: Support
+    position: Rear
+    cd: 15
+    aliases: []
+  Butter Roll:
+    id: 597
+    rarity: Epic
+    type: Charge
+    position: Front
+    cd: 12
+    aliases: []
+  Matcha:
+    id: 110
+    rarity: Epic
+    type: Magic
+    position: Middle
+    cd: 12
+    aliases: []
+  Mercurial Knight:
+    id: 595
+    rarity: Epic
+    type: Charge
+    position: Front
+    cd: 11
+    aliases: []
+  Silverbell:
+    id: 594
+    rarity: Epic
+    type: Support
+    position: Rear
+    cd: 15
+    aliases: []
   Rebel:
     id: 0
     rarity: Epic
