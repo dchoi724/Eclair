@@ -10,6 +10,7 @@ from topping_bot.util.const import INFO_PATH, STATIC_PATH
 
 
 class Rarity(Enum):
+    BEAST = "Beast"
     ANCIENT = "Ancient"
     DRAGON = "Dragon"
     LEGENDARY = "Legendary"

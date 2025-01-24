@@ -12,6 +12,7 @@ order:
   - White Lily
   - Stormbringer
   - Wildberry
+  - Cream Ferret
   - Icicle Yeti
   - Strawberry
   - Moon Rabbit
@@ -23,6 +24,7 @@ order:
   - Crimson Coral
   - Burnt Cheese
   - Pitaya Dragon
+  - Mystic Flour
   - Avocado
   - Milky Way
   - Rebel
@@ -40,6 +42,9 @@ order:
   - Caramel Arrow
   - Mozzarella
   - Sonic
+  - Star Coral
+  - Peach Blossom
+  - Cloud Haetae
   - Frilled Jellyfish
   - Macaron
   - Clotted Cream
@@ -123,6 +128,14 @@ order:
   - BTS
   - Snapdragon
 cookies:
+  Mystic Flour:
+    id: 601
+    rarity: Beast
+    type: Healing
+    position: Rear
+    cd: 15
+    aliases:
+      - MF
   White Lily:
     id: 509
     rarity: Ancient
@@ -317,6 +330,27 @@ cookies:
       - CC
       - Clotted
       - Clot
+  Star Coral:
+    id: 614
+    rarity: Epic
+    type: Support
+    position: Rear
+    cd: 14
+    aliases: []
+  Peach Blossom:
+    id: 612
+    rarity: Epic
+    type: Support
+    position: Middle
+    cd: 12
+    aliases: []
+  Cloud Haetae:
+    id: 611
+    rarity: Epic
+    type: Defense
+    position: Front
+    cd: 11
+    aliases: []
   Street Urchin:
     id: 599
     rarity: Epic
@@ -1032,6 +1066,14 @@ cookies:
     cd: 16
     aliases:
       - MC
+  Cream Ferret:
+    id: 613
+    rarity: Special
+    type: Support
+    position: Rear
+    cd: 18
+    aliases: 
+      - Ferret
   Icicle Yeti:
     id: 591
     rarity: Special
