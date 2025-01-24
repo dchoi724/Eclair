@@ -282,10 +282,6 @@ def extract_topping_data(unique_frames: Iterable[np.ndarray], debug=False, verbo
                 metatype = None
                 metatype_error = float("inf")
                 for resonance in [resonance for resonance in Resonance if resonance != Resonance.NORMAL]:
-                    # todo: temporarily disable Trio. It is getting scanned instead of Tropical Rock. 
-                    if (resonance == Resonance.TRIO):
-                        continue
-
                     template = TEMPLATES["resonant"][resonance.value.lower().replace(" ", "_")]
                     h, w = template.shape
 
