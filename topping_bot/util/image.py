@@ -105,6 +105,13 @@ TOPPINGS = {
         Type.CD: Image.open(TOPPING_PATH / "iris" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
         Type.ATKSPD: Image.open(TOPPING_PATH / "iris" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
         Type.CRIT: Image.open(TOPPING_PATH / "iris" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
+    },
+    Resonance.DECEITFUL: {
+        Type.DMGRES: Image.open(TOPPING_PATH / "deceitful" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
+        Type.ATK: Image.open(TOPPING_PATH / "deceitful" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
+        Type.CD: Image.open(TOPPING_PATH / "deceitful" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
+        Type.ATKSPD: Image.open(TOPPING_PATH / "deceitful" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
+        Type.CRIT: Image.open(TOPPING_PATH / "deceitful" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
     }
 }
 STATIC = {

@@ -17,6 +17,7 @@ class Resonance(Enum):
     DESTRUCTIVE = "Destructive"
     FRAGRANT = "Fragrant"
     IRIS_GEM = "Iris Gem"
+    DECEITFUL = "Deceitful"
 
 
 class Type(Enum):
