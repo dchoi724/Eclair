@@ -4,7 +4,7 @@ from functools import cache
 from typing import Any, List, Tuple
 
 import yaml
-from yaml import BaseLoader
+from yaml import SafeLoader
 
 from topping_bot.crk.cookies import Cookie
 from topping_bot.optimize.toppings import INFO, Resonance, Topping, Type
@@ -47,9 +47,6 @@ def sanitize(requirements_fp, user_id=0, rem_leaderboard=False):
                     if substat != "max":
                         converted_req[substat] = value
                 cookie["requirements"][i] = converted_req
-
-        if cookie.get("name") and Cookie.get(cookie["name"]):
-            cookie.pop("resonant", None)
 
     filtered_mods = {}
     for substat, mods in requirements.get("modifiers", {}).items():
@@ -94,7 +91,7 @@ class Requirements:
     def from_yaml(cls, fp):
         """Loads cookie requirements from a properly formatted yaml file"""
         with open(fp) as f:
-            requirements = yaml.load(f, BaseLoader)
+            requirements = yaml.load(f, SafeLoader)
 
         mods = defaultdict(Decimal)
         for stat, buffs in DEFAULT_MODIFIERS.items():
