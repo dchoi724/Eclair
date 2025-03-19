@@ -18,6 +18,8 @@ class Resonance(Enum):
     FRAGRANT = "Fragrant"
     IRIS_GEM = "Iris Gem"
     DECEITFUL = "Deceitful"
+    TRUTHFUL = "Truthful"
+    SACRED_VOW = "Sacred Vow"
 
 
 class Type(Enum):
