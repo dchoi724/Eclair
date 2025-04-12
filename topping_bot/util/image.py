@@ -244,13 +244,17 @@ def toppings_to_images(toppings: List[Tuple[int, Topping]], user_id, show_index=
         images.append(fp)
     return images
 
-
-def topping_set_to_image(topping_set: ToppingSet, user_id, name=None):
+def topping_set_to_image(topping_set: ToppingSet, user_id, name=None, tart=None):
     fp = TMP_PATH / f"{user_id}.png"
 
-    image = Image.new("RGBA", (1080, 1080), "rgb(3, 5, 9)")
+    image = Image.new("RGBA", (1080, 1180), "rgb(3, 5, 9)")
     draw = ImageDraw.Draw(image)
 
+    # draw background rectangles
+    # - outer_padding = 10
+    # - inter_item_padding = 20
+    
+    # toppings box
     draw.rounded_rectangle(
         ((10, 10), (1070, 530)),
         fill="rgb(44, 49, 65)",
@@ -258,22 +262,41 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None):
         width=5,
         radius=30,
     )
+    # tart box
     draw.rounded_rectangle(
-        ((10, 550), (1070, 935)),
+        ((10, 550), (1070, 650)),
+        fill="rgb(44, 49, 65)",
+        outline="rgb(74, 93, 180)",
+        width=5,
+        radius=30,
+    )
+    # total stats box
+    draw.rounded_rectangle(
+        ((10, 670), (1070, 1035)),
         fill="rgb(35, 35, 37)",
         outline="rgb(50, 51, 53)",
         width=2,
         radius=30,
     )
+    # set bonus box 1
     draw.rounded_rectangle(
-        ((10, 955), (530, 1070)),
+        ((10, 1055), (350, 1170)),
         fill="rgb(35, 35, 37)",
         outline="rgb(50, 51, 53)",
         width=2,
         radius=30,
     )
+    # set bonus box 2
     draw.rounded_rectangle(
-        ((550, 955), (1070, 1070)),
+        ((370, 1055), (710, 1170)),
+        fill="rgb(35, 35, 37)",
+        outline="rgb(50, 51, 53)",
+        width=2,
+        radius=30,
+    ) 
+    # set bonus box 3
+    draw.rounded_rectangle(
+        ((730, 1055), (1070, 1170)),
         fill="rgb(35, 35, 37)",
         outline="rgb(50, 51, 53)",
         width=2,
@@ -292,6 +315,7 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None):
     toppings = topping_set.toppings
     toppings = [toppings[3], toppings[1], toppings[0], toppings[2], toppings[4]]
 
+    # draw the toppings
     for i, topping in enumerate(toppings):
         topping_img = TOPPINGS[topping.resonance][topping.flavor].resize((135, 198)).rotate(i * -72, expand=True)
         image.paste(topping_img, coords[i], topping_img)
@@ -311,6 +335,19 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None):
 
     font = ImageFont.truetype(str(TOPPING_PATH / "font.otf"), size=48)
 
+    # draw the tart stats
+    if tart:
+        draw.text(
+            (540, (550 + 650) // 2),
+            f"Tart: {tart.substat.value} {tart.target}%",
+            font=font,
+            fill="rgb(255, 255, 255)",
+            stroke_fill="rgb(0, 0, 0)",
+            stroke_width=2,
+            anchor="mm",
+        )
+
+    # draw the total stats from toppings
     for i, (left, right) in enumerate(
         [
             (Type.ATK, Type.DEF),
@@ -321,7 +358,7 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None):
         ]
     ):
         draw.text(
-            (30, 75 * i + 560),
+            (30, 75 * i + 670),
             left.value,
             font=font,
             fill="rgb(140, 140, 140)",
@@ -330,7 +367,7 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None):
         )
         left_percent = topping_set.raw(left)
         draw.text(
-            (520, 75 * i + 560),
+            (520, 75 * i + 670),
             f"{str(left_percent) + '%' if left_percent else '-'}",
             font=font,
             fill="rgb(255, 255, 255)",
@@ -339,7 +376,7 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None):
             anchor="ra",
         )
         draw.text(
-            (560, 75 * i + 560),
+            (560, 75 * i + 670),
             right.value,
             font=font,
             fill="rgb(140, 140, 140)",
@@ -348,7 +385,7 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None):
         )
         right_percent = topping_set.raw(right)
         draw.text(
-            (1050, 75 * i + 560),
+            (1050, 75 * i + 670),
             f"{str(right_percent) + '%' if right_percent else '-'}",
             font=font,
             fill="rgb(255, 255, 255)",
@@ -357,28 +394,41 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None):
             anchor="ra",
         )
 
-    set_bonuses = []
+    set_bonuses = {}
+
+    complete_toppings = topping_set.toppings
+    if tart:
+        complete_toppings = complete_toppings + [Topping(resonance=Resonance.NORMAL, substats=[(tart.substat, tart.target)])]
+        
     for substat in INFO.keys():
         possible_set_bonuses = INFO[substat]["view_combos"]
+        
+        count_matched = len([t for t in complete_toppings if t.flavor == substat])
+
         for count, bonus in possible_set_bonuses:
-            if count <= len([topping for topping in topping_set.toppings if topping.flavor == substat]):
-                set_bonuses.append((count, substat, bonus))
+            if count <= count_matched:
+                if substat not in set_bonuses or bonus > set_bonuses[substat][2]:
+                    set_bonuses[substat] = (count, substat, bonus)
 
-    font = ImageFont.truetype(str(TOPPING_PATH / "font.otf"), size=38)
+    set_bonuses_array = list(set_bonuses.values())
 
-    set_bonuses.sort()
-    for i, (_, substat, bonus) in enumerate(set_bonuses):
+    # draw set bonuses
+    for i, (count, substat, bonus) in enumerate(set_bonuses_array):
+        
+        font = ImageFont.truetype(str(TOPPING_PATH / "font.otf"), size=30)
         draw.text(
-            (540 * i + 270, 959),
-            f"{' '.join(INFO[substat]['name'].split()[1:])} Set Effect",
+            (360 * i + 180, 1060),
+            f"{' '.join(INFO[substat]['name'].split()[1:])} Set Effect ({count})",
             font=font,
-            fill="rgb(194, 251, 92)",
+            fill="rgb(255,255,255)",
             stroke_fill="rgb(0, 0, 0)",
             stroke_width=2,
             anchor="ma",
         )
+        
+        font = ImageFont.truetype(str(TOPPING_PATH / "font.otf"), size=38)
         draw.text(
-            (540 * i + 270, 1017),
+            (360 * i + 180, 1115),
             f"{substat.value} {bonus}%",
             font=font,
             fill="rgb(194, 251, 92)",
@@ -387,6 +437,7 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None):
             anchor="ma",
         )
 
+    # draw cookie head
     if name:
         cookie = Cookie.get(name)
         if cookie and cookie.head.exists():

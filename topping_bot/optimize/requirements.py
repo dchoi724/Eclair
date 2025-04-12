@@ -1,7 +1,7 @@
 from collections import defaultdict
 from decimal import Decimal
 from functools import cache
-from typing import Any, List, Tuple
+from typing import Any, List, Tuple, Optional
 
 import yaml
 from yaml import SafeLoader
@@ -50,7 +50,8 @@ def sanitize(requirements_fp, user_id=0, rem_leaderboard=False):
 
     filtered_mods = {}
     for substat, mods in requirements.get("modifiers", {}).items():
-        filtered_substat = [mod for mod in mods if mod["source"] not in DEFAULT_MODIFIERS.get(Type(substat), {})]
+        filtered_substat = [mod for mod in mods if mod["source"]
+            not in DEFAULT_MODIFIERS.get(Type(substat), {})]
         if filtered_substat:
             filtered_mods[substat] = filtered_substat
     if filtered_mods:
@@ -63,7 +64,7 @@ def sanitize(requirements_fp, user_id=0, rem_leaderboard=False):
 
 
 class Requirements:
-    def __init__(self, name: str, valid: List, objective: Any, mods: dict, resonance: List, weight: int = None):
+    def __init__(self, name: str, valid: List, objective: Any, mods: dict, resonance: List, tart: Optional[Equality], weight: int = None):
         if not objective:
             raise Exception(f"{name} : one objective must be specified")
         self.name = name
@@ -72,10 +73,21 @@ class Requirements:
         self.mods = mods
         self.resonance = resonance
         self.weight = weight
+        self.tart = tart
 
     def __str__(self):
         result = f"**{self.name.upper()}**"
         result += "\n```"
+        if self.resonance:
+            filtered_resonance = [
+                res for res in self.resonance if res != Resonance.NORMAL]
+            if filtered_resonance:
+                result += "\nResonance"
+                for res in filtered_resonance:
+                    result += f"\n├ {res.value}"
+        if self.tart:
+            result += "\nTart"
+            result += f"\n├ {self.tart}"
         if self.valid:
             result += "\nValidity"
             for valid in self.valid:
@@ -108,28 +120,35 @@ class Requirements:
         for cookie in requirements["cookies"]:
             cookie_mods = mods.copy()
             valid_reqs, objective = [], None
+            parsed_tart = None
 
             for requirement in cookie["requirements"]:
                 if type(requirement) is str:
                     valid = cls.parse_valid_requirement(requirement)
 
                     if valid is None:
-                        raise Exception(f"{cookie['name']} : could not parse {requirement}")
+                        raise Exception(
+                            f"{cookie['name']} : could not parse {requirement}")
                     if type(valid) is Relative and valid.cookie not in cookie_names:
-                        raise Exception(f"{cookie['name']} : relative target must be a previously seen cookie")
+                        raise Exception(
+                            f"{cookie['name']} : relative target must be a previously seen cookie")
 
                     valid_reqs.append(valid)
 
                 elif type(requirement) is dict:
                     if objective is not None:
-                        raise Exception(f"{cookie['name']} : only one objective may be specified")
+                        raise Exception(
+                            f"{cookie['name']} : only one objective may be specified")
                     if requirement.get("max") is None:
-                        raise Exception(f"{cookie['name']} : objective must have the 'max' key")
+                        raise Exception(
+                            f"{cookie['name']} : objective must have the 'max' key")
 
-                    objective = cls.parse_objective_requirement(requirement, cookie_mods)
+                    objective = cls.parse_objective_requirement(
+                        requirement, cookie_mods)
 
                     if type(objective) is Combo and not objective.types:
-                        raise Exception(f"{cookie['name']} : Combo objective must specify substats")
+                        raise Exception(
+                            f"{cookie['name']} : Combo objective must specify substats")
 
             cookie_names.add(cookie["name"])
             if cookie.get("resonant"):
@@ -145,8 +164,33 @@ class Requirements:
                 else None
             )
 
-            cookies.append(Requirements(cookie["name"], valid_reqs, objective, cookie_mods, resonances, weight=weight))
+            if "tart" in cookie:
+                len_tart = len(cookie["tart"])
+                if len_tart > 1:
+                    raise Exception(
+                        f"{cookie['name']} : only one tart may be specified")
+                
+                if len_tart == 1:
+                    tart_line = cookie["tart"][0]
+                    if type(tart_line) is str:
+                        tart_valid = cls.parse_valid_tart_line(tart_line)
+
+                        if tart_valid is None:
+                            raise Exception(
+                                f"{cookie['name']} : could not parse tart {tart_line}")
+
+                        parsed_tart = tart_valid
+
+            cookies.append(Requirements(
+                cookie["name"], valid_reqs, objective, cookie_mods, resonances, parsed_tart, weight=weight))
         return cookies
+
+    @staticmethod
+    def parse_valid_tart_line(tart_line: str):
+        # validate tart line (e.g. "ATK 9.6")
+        result = Equality.parse(tart_line)
+        if result:
+            return result
 
     @staticmethod
     def parse_valid_requirement(requirement: str):
@@ -163,17 +207,20 @@ class Requirements:
             return Combo([Type(substat) for substat in requirement["substats"]], cookie_mods)
         elif objective == Type.E_DMG:
             for substat in cookie_mods:
-                cookie_mods[substat] += Decimal(requirement.get(substat.value, "0"))
+                cookie_mods[substat] += Decimal(
+                    requirement.get(substat.value, "0"))
             return EDMG(cookie_mods)
         elif objective == Type.VITALITY:
             for substat in cookie_mods:
-                cookie_mods[substat] += Decimal(requirement.get(substat.value, "0"))
+                cookie_mods[substat] += Decimal(
+                    requirement.get(substat.value, "0"))
             return Vitality(cookie_mods)
         else:
             return Objective(substat=objective)
 
     def realize(self, cookie_sets: dict):
-        self.valid = [req for valid in self.valid for req in valid.convert(cookies=cookie_sets)]
+        self.valid = [req for valid in self.valid for req in valid.convert(
+            cookies=cookie_sets)]
 
         collapsed = {}
         for valid in self.valid:
@@ -202,11 +249,13 @@ class Requirements:
             for req in self.floor_reqs():
                 substat, required = req.substat, req.target
                 if bounds.get(substat):
-                    bounds[substat]["min"] = min(bounds[substat]["min"], required / Decimal("100"))
+                    bounds[substat]["min"] = min(
+                        bounds[substat]["min"], required / Decimal("100"))
             for req in self.ceiling_reqs():
                 substat, required = req.substat, req.target
                 if bounds.get(substat):
-                    bounds[substat]["max"] = min(bounds[substat]["max"], required / Decimal("100"))
+                    bounds[substat]["max"] = min(
+                        bounds[substat]["max"], required / Decimal("100"))
 
     @property
     @cache
@@ -238,15 +287,17 @@ class Requirements:
         return [valid for valid in self.valid if valid.op.str == "<=" and valid.target == Decimal(0)]
 
     def best_possible_set_effect(self, combo: List[Topping], substats: Tuple[Type], non_match_count: int):
-        best_set_bonuses = {
-            2: Decimal(0),
-            3: Decimal(0),
-            5: Decimal(0),
-        }
+        best_set_bonuses = {req: Decimal(0) for req in (2, 3, 5, 6)}
+
+        non_matching_toppings = sum(1 for t in combo if t.flavor not in substats)
 
         for s in substats:
             for req, bonus in INFO[s]["combos"]:
-                if non_match_count <= 5 - req - sum(1 for t in combo if t.flavor not in substats):
+                if non_match_count + non_matching_toppings <= 6 - req:
                     best_set_bonuses[req] = max(best_set_bonuses[req], bonus)
 
-        return max(best_set_bonuses[2] + best_set_bonuses[3], best_set_bonuses[5])
+        return max(
+            best_set_bonuses[2] + best_set_bonuses[3],
+            best_set_bonuses[5],
+            best_set_bonuses[6]
+        )

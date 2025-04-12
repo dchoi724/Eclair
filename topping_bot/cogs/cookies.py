@@ -296,8 +296,8 @@ class Cookies(Cog, description="Optimize your cookies' toppings"):
                 optimizer.set_solution(solution)
                 optimizer.reqs = cookie
                 optimizer.select(cookie.name)
-
-                cookie_img = topping_set_to_image(optimizer.solution, ctx.message.author.id, name=cookie.name)
+                
+                cookie_img = topping_set_to_image(optimizer.solution, ctx.message.author.id, name=cookie.name, tart=cookie.tart)
 
                 name = "".join(char for char in cookie.name if char.isalnum())
                 image = discord.File(cookie_img, filename=f"{name}.png")

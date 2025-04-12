@@ -60,5 +60,6 @@ def optimize_cookie(optimizer, cookie, shared_mem_name, solution):
     pbar.close()
 
     if optimizer.solution:
-        for i, topping in enumerate(optimizer.solution.toppings):
+        # skip index 1 which is reserved for tart topping
+        for i, topping in enumerate(optimizer.solution.toppings[1:]):
             solution[i] = optimizer.inventory.index(topping)
