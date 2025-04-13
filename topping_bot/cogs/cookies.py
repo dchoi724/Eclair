@@ -306,13 +306,28 @@ class Cookies(Cog, description="Optimize your cookies' toppings"):
                     if not cancelled
                     else f"__**{cookie.name} STOPPED Topping Set**__"
                 )
+
+                tart_desc = (
+                    f"Tart:\n├ {cookie.tart.substat.value} {cookie.tart.target:.1f}%"
+                    if cookie.tart else ""
+                )
+                biscuit_desc = (
+                    "Biscuit:\n" + "\n".join(
+                        f"├ {item.substat.value} {item.target:.1f}%" for item in cookie.biscuit
+                    )
+                    if cookie.biscuit else ""
+                )
+                description = "\n".join(part for part in [tart_desc, biscuit_desc] if part)
+
                 footer = "  |  ".join(
                     f"{substat.value} : {value:.1f}"
                     for substat, value in optimizer.reqs.objective.fancy_value(optimizer.solution).items()
                 )
+
                 embed = await new_embed(
                     title=title,
                     image=f"attachment://{name}.png",
+                    description=description,
                     footer=footer,
                     thumbnail=False,
                 )

@@ -1,4 +1,5 @@
 from collections import defaultdict
+from copy import deepcopy
 from decimal import Decimal
 from functools import cache
 from typing import Any, List, Tuple, Optional
@@ -64,7 +65,7 @@ def sanitize(requirements_fp, user_id=0, rem_leaderboard=False):
 
 
 class Requirements:
-    def __init__(self, name: str, valid: List, objective: Any, mods: dict, resonance: List, tart: Optional[Equality], weight: int = None):
+    def __init__(self, name: str, valid: List, objective: Any, mods: dict, resonance: List[Resonance], tart: Optional[Equality], biscuit: Optional[List[Equality]], weight: int = None):
         if not objective:
             raise Exception(f"{name} : one objective must be specified")
         self.name = name
@@ -72,15 +73,15 @@ class Requirements:
         self.objective = objective
         self.mods = mods
         self.resonance = resonance
-        self.weight = weight
         self.tart = tart
+        self.biscuit = biscuit 
+        self.weight = weight
 
     def __str__(self):
         result = f"**{self.name.upper()}**"
         result += "\n```"
         if self.resonance:
-            filtered_resonance = [
-                res for res in self.resonance if res != Resonance.NORMAL]
+            filtered_resonance = [res for res in self.resonance if res != Resonance.NORMAL]
             if filtered_resonance:
                 result += "\nResonance"
                 for res in filtered_resonance:
@@ -88,6 +89,10 @@ class Requirements:
         if self.tart:
             result += "\nTart"
             result += f"\n├ {self.tart}"
+        if self.biscuit:
+            result += "\nBiscuit"
+            for biscuit_line in self.biscuit:
+                result += f"\n├ {biscuit_line}"
         if self.valid:
             result += "\nValidity"
             for valid in self.valid:
@@ -121,6 +126,7 @@ class Requirements:
             cookie_mods = mods.copy()
             valid_reqs, objective = [], None
             parsed_tart = None
+            parsed_biscuit = []
 
             for requirement in cookie["requirements"]:
                 if type(requirement) is str:
@@ -164,11 +170,10 @@ class Requirements:
                 else None
             )
 
-            if "tart" in cookie:
+            if cookie.get("tart") and isinstance(cookie["tart"], list):
                 len_tart = len(cookie["tart"])
                 if len_tart > 1:
-                    raise Exception(
-                        f"{cookie['name']} : only one tart may be specified")
+                    raise Exception(f"{cookie['name']} : only one tart may be specified")
                 
                 if len_tart == 1:
                     tart_line = cookie["tart"][0]
@@ -181,13 +186,30 @@ class Requirements:
 
                         parsed_tart = tart_valid
 
+            if cookie.get("biscuit") and isinstance(cookie["biscuit"], list):
+                for biscuit_line in cookie["biscuit"]:
+                    if type(biscuit_line) is str:
+                        biscuit_valid = cls.parse_valid_biscuit_line(biscuit_line)
+
+                        if biscuit_valid is None:
+                            raise Exception(
+                                f"{cookie['name']} : could not parse biscuit {biscuit_line}")
+
+                        parsed_biscuit.append(biscuit_valid)
+
             cookies.append(Requirements(
-                cookie["name"], valid_reqs, objective, cookie_mods, resonances, parsed_tart, weight=weight))
+                cookie["name"], valid_reqs, objective, cookie_mods, resonances, parsed_tart, parsed_biscuit, weight=weight)
+            )
         return cookies
 
     @staticmethod
+    def parse_valid_biscuit_line(biscuit_line: str):
+        result = Equality.parse(biscuit_line)
+        if result:
+            return result
+
+    @staticmethod
     def parse_valid_tart_line(tart_line: str):
-        # validate tart line (e.g. "ATK 9.6")
         result = Equality.parse(tart_line)
         if result:
             return result
@@ -219,11 +241,11 @@ class Requirements:
             return Objective(substat=objective)
 
     def realize(self, cookie_sets: dict):
-        self.valid = [req for valid in self.valid for req in valid.convert(
+        self.adjusted_valid = [req for valid in self.adjusted_valid for req in valid.convert(
             cookies=cookie_sets)]
 
         collapsed = {}
-        for valid in self.valid:
+        for valid in self.adjusted_valid:
             valid.fuzz()
 
             if collapsed.get(valid):
@@ -232,10 +254,10 @@ class Requirements:
             else:
                 collapsed[valid] = valid
 
-        self.valid = list(collapsed.values())
+        self.adjusted_valid = list(collapsed.values())
 
         matched = defaultdict(dict)
-        for valid in self.valid:
+        for valid in self.adjusted_valid:
             matched[valid.substat][valid.op.str] = valid.target
 
         for s, bounds in matched.items():
@@ -259,8 +281,47 @@ class Requirements:
 
     @property
     @cache
+    def merged_biscuit(self):
+        """Merge biscuit lines by accumulating targets for the same substat."""
+        if not self.biscuit:
+            return None
+
+        merged_biscuit = {}
+        for curr_line in self.biscuit:
+            substat_name = curr_line.substat.name
+            if substat_name in merged_biscuit:
+                merged_biscuit[substat_name].target += curr_line.target
+            else:
+                merged_biscuit[substat_name] = deepcopy(curr_line)
+
+        return list(merged_biscuit.values())
+
+    
+    @property
+    @cache
+    def adjusted_valid(self):
+        """Adjust valid requirements by offsetting them with biscuit values."""
+        adjusted_valid = {line.substat.name: deepcopy(line) for line in self.valid}
+
+        if self.merged_biscuit:
+            for curr_line in self.merged_biscuit:
+                substat_name = curr_line.substat.name
+                if substat_name in adjusted_valid:
+                    adjusted_valid[substat_name].target = max(
+                        adjusted_valid[substat_name].target - curr_line.target, 0
+                    )
+
+        return list(adjusted_valid.values())
+    
+    @adjusted_valid.setter
+    def adjusted_valid(self, value):
+        """Allow setting adjusted_valid."""
+        self._adjusted_valid = value
+    
+    @property
+    @cache
     def valid_substats(self):
-        return tuple(r.substat for r in self.valid if r.op.str == ">=" and r.substat not in self.objective.types)
+        return tuple(r.substat for r in self.adjusted_valid if r.op.str == ">=" and r.substat not in self.objective.types)
 
     @property
     @cache
@@ -269,22 +330,22 @@ class Requirements:
 
     @cache
     def floor(self, substat: Type):
-        for req in self.valid:
+        for req in self.adjusted_valid:
             if req.substat == substat and req.op.str == ">=":
                 return req.target
         return Decimal(0)
 
     @cache
     def floor_reqs(self):
-        return [valid for valid in self.valid if valid.op.str == ">="]
+        return [valid for valid in self.adjusted_valid if valid.op.str == ">="]
 
     @cache
     def ceiling_reqs(self):
-        return [valid for valid in self.valid if valid.op.str == "<=" and valid.target != Decimal(0)]
+        return [valid for valid in self.adjusted_valid if valid.op.str == "<=" and valid.target != Decimal(0)]
 
     @cache
     def zero_reqs(self):
-        return [valid for valid in self.valid if valid.op.str == "<=" and valid.target == Decimal(0)]
+        return [valid for valid in self.adjusted_valid if valid.op.str == "<=" and valid.target == Decimal(0)]
 
     def best_possible_set_effect(self, combo: List[Topping], substats: Tuple[Type], non_match_count: int):
         best_set_bonuses = {req: Decimal(0) for req in (2, 3, 5, 6)}

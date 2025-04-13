@@ -34,6 +34,13 @@ class Type(Enum):
     DEF = "DEF"
     BUFFRES = "Debuff Resist"
     CRITRES = "CRIT Resist"
+    # in-game non-standard substats (biscuit)
+    DARK_DMG = "DARK_DMG"
+    ELEC_DMG = "ELEC DMG"
+    FIRE_DMG = "FIRE_DMG"
+    EARTH_DMG = "EARTH DMG"
+    POISON_DMG = "POISON DMG"
+    LIGHT_DMG = "LIGHT DMG"
     # in-game attributes
     CRIT_DMG = "CRIT DMG"
     ATK_MULT = "ATK MULT"
@@ -44,6 +51,14 @@ class Type(Enum):
     # helpers
     RNG = "RNG"
 
+ELEMENTAL_DMG = [
+    Type.DARK_DMG, 
+    Type.ELEC_DMG, 
+    Type.FIRE_DMG, 
+    Type.EARTH_DMG, 
+    Type.POISON_DMG, 
+    Type.LIGHT_DMG
+]
 
 INFO = {
     Type.DMGRES: {

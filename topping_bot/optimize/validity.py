@@ -4,11 +4,11 @@ from decimal import Decimal
 
 import pyparsing as pp
 
-from topping_bot.optimize.toppings import INFO, Type
+from topping_bot.optimize.toppings import ELEMENTAL_DMG, INFO, Type
 
-
+# todo: fix elemental dmg to allow "Elec DMG" instead of "ELEC DMG" key
 SUBSTATS = pp.MatchFirst(
-    [pp.CaselessLiteral(substat.value) for substat in sorted(list(INFO.keys()), key=lambda x: x.value, reverse=True)]
+    [pp.CaselessLiteral(substat.value) for substat in sorted(list(INFO.keys()) + ELEMENTAL_DMG , key=lambda x: x.value, reverse=True)]
 )
 TARGET = pp.Word(pp.nums) + pp.Opt("." + pp.Word(pp.nums))
 
