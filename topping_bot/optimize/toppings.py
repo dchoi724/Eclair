@@ -35,9 +35,9 @@ class Type(Enum):
     BUFFRES = "Debuff Resist"
     CRITRES = "CRIT Resist"
     # in-game non-standard substats (biscuit)
-    DARK_DMG = "DARK_DMG"
+    DARK_DMG = "DARK DMG"
     ELEC_DMG = "ELEC DMG"
-    FIRE_DMG = "FIRE_DMG"
+    FIRE_DMG = "FIRE DMG"
     EARTH_DMG = "EARTH DMG"
     POISON_DMG = "POISON DMG"
     LIGHT_DMG = "LIGHT DMG"
