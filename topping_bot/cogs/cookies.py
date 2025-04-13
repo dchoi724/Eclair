@@ -252,12 +252,12 @@ class Cookies(Cog, description="Optimize your cookies' toppings"):
 
                     await asyncio.sleep(2)
 
-                    if not cancelled and start_time + timedelta(minutes=20) < datetime.now():
+                    if not cancelled and start_time + timedelta(minutes=40) < datetime.now():
                         cancel_memory = SharedMemory(name=shared_memory.name)
                         cancel_memory.buf[-1] = 1
                         cancelled = True
 
-                    if cancelled and start_time + timedelta(minutes=22) < datetime.now():
+                    if cancelled and start_time + timedelta(minutes=42) < datetime.now():
                         process.terminate()
 
                 shared_memory.close()

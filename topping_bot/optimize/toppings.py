@@ -50,6 +50,7 @@ class Type(Enum):
     VITALITY = "Vitality"
     # helpers
     RNG = "RNG"
+    NONE = 'None'
 
 ELEMENTAL_DMG = [
     Type.DARK_DMG, 

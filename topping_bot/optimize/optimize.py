@@ -57,7 +57,7 @@ class Optimizer:
 
         # initialize a dummy tart topping
         tart_topping = Topping(
-            substats=[(Type.CRITRES, Decimal(0))],    
+            substats=[(Type.NONE, Decimal(0))],    
             resonance=Resonance.NORMAL   
         )
 
