@@ -242,10 +242,10 @@ def extract_topping_data(unique_frames: Iterable[np.ndarray], debug=False, verbo
         threshold, frame = cv2.threshold(frame, 180, 255, cv2.THRESH_BINARY)
 
         #  crop img of all substats rows (vertical range, horizontal range)
-        topping_info = frame[750:1350, 200:] 
+        topping_info = frame[800:1400, 220:] 
 
         # crop img of the main stat line
-        main = frame[740:850]
+        main = frame[800:910]
 
         flavor, value = image_to_substat(main[:, :1430], "flavor"), image_to_decimal(main[:, 1430:])
         if flavor is None or value is None or value == "0":
@@ -256,7 +256,14 @@ def extract_topping_data(unique_frames: Iterable[np.ndarray], debug=False, verbo
 
         for j in range(3):
             line = substats_info[150 * j : 150 * j + 150]
-            substat, value = image_to_substat(line[:, 10:1345], "substat"), image_to_decimal(line[:, 1345:])
+
+            # cv2.imshow("line", line)
+            # cv2.imshow("substat", line[:, :1430])
+            # cv2.imshow("value", line[:, 1430:])
+            # cv2.waitKey(0)    
+            # cv2.destroyAllWindows()
+
+            substat, value = image_to_substat(line[:, :1430], "substat"), image_to_decimal(line[:, 1430:])
 
             if substat is None or value is None:
                 continue
@@ -265,13 +272,18 @@ def extract_topping_data(unique_frames: Iterable[np.ndarray], debug=False, verbo
 
         # Resonance check
         if substats:
-            resonant_indicator_roi = frame[235:325, 1180:1270]
+            resonant_indicator_roi = frame[235:355, 1240:1400]
+
             h, w = resonant_indicator_roi.shape
             if np.count_nonzero(resonant_indicator_roi == 0) / (h * w) < 0.5:
                 metatype = Resonance.NORMAL
             else:
                 # metatype check
-                title = frame[110:220, 200:-200]
+                title = frame[110:250, 200:-200]
+                # cv2.imshow("title", title)
+                # cv2.waitKey(0)
+                # cv2.destroyAllWindows()
+
                 active_pixels = np.stack(np.where(title == 0))
                 if active_pixels.size == 0:
                     return None
@@ -285,10 +297,16 @@ def extract_topping_data(unique_frames: Iterable[np.ndarray], debug=False, verbo
                     template = TEMPLATES["resonant"][resonance.value.lower().replace(" ", "_")]
                     h, w = template.shape
 
+                    # TM_SQDIFF method
                     result = cv2.matchTemplate(title, template, cv2.TM_SQDIFF)
                     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
 
                     x, y = min_loc
+
+                    # cv2.imshow("Title Region", title[y : y + h, x : x + w])
+                    # cv2.imshow("Template", template)
+                    # cv2.waitKey(0)
+                    # cv2.destroyAllWindows()
 
                     if (
                         error := cv2.norm(title[y : y + h, x : x + w], template, cv2.NORM_L1) / (h * w)
