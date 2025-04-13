@@ -99,6 +99,12 @@ def image_to_substat(source: np.ndarray, template, debug=False):
     top_left = np.min(active_pixels, axis=1).astype(np.int32)
     bot_right = np.max(active_pixels, axis=1).astype(np.int32)
 
+    # use to update flavor/substat templates
+    # if template == "flavor":
+    #     cv2.imwrite(str(READER_PATH / "flavor" / "new.jpg"), source)
+    # elif template == "substat":
+    #     cv2.imwrite(str(READER_PATH / "substat" / "new.jpg"), source)
+
     return fp_to_type(
         min(TEMPLATES[template], key=lambda x: image_diff(source, TEMPLATES[template][x], top_left, bot_right, debug))
     )
@@ -111,6 +117,9 @@ def image_to_decimal(source: np.ndarray):
         return None
 
     source = cv2.dilate(source, KERNEL)
+
+    # use to update digits templates
+    # cv2.imwrite(str(READER_PATH / "digits" / "new.jpg"), source)
 
     contours, hierarchies = cv2.findContours(source, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # rectangles = [cv2.boundingRect(c) for c in contours if y * x * 0.025 < cv2.contourArea(c) < y * x * 0.9]
