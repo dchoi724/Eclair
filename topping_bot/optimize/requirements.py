@@ -298,19 +298,38 @@ class Requirements:
 
     
     @property
-    @cache
     def adjusted_valid(self):
         """Adjust valid requirements by offsetting them with biscuit values."""
+        
+        if hasattr(self, "_adjusted_valid"):
+            return self._adjusted_valid
+        
         adjusted_valid = {line.substat.name: deepcopy(line) for line in self.valid}
 
         if self.merged_biscuit:
-            for curr_line in self.merged_biscuit:
-                substat_name = curr_line.substat.name
+            for curr_biscuit_line in self.merged_biscuit:
+                substat_name = curr_biscuit_line.substat.name
+                biscuit_line_value = curr_biscuit_line.target
+                
                 if substat_name in adjusted_valid:
-                    adjusted_valid[substat_name].target = max(
-                        adjusted_valid[substat_name].target - curr_line.target, 0
-                    )
+                    curr_adjusted_valid = adjusted_valid[substat_name]
 
+                    if isinstance(curr_adjusted_valid, Range):
+                        # For Range, we need to adjust both low and high targets
+                        curr_adjusted_valid.low_target = max(
+                            curr_adjusted_valid.low_target - biscuit_line_value, 0
+                        )
+                        curr_adjusted_valid.high_target = max(
+                            curr_adjusted_valid.high_target - biscuit_line_value, 0
+                        )
+                    elif isinstance(curr_adjusted_valid, Equality) or isinstance(curr_adjusted_valid, Normal):
+                        # For Equality and Normal, we just adjust the target
+                        curr_adjusted_valid.target = max(
+                            curr_adjusted_valid.target - biscuit_line_value, 0
+                        )
+                    else:
+                        # todo confirm if need to handle Relative
+                        pass
         return list(adjusted_valid.values())
     
     @adjusted_valid.setter
