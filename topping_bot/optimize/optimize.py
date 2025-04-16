@@ -98,9 +98,11 @@ class Optimizer:
 
     def dfs(self, combo: List[Topping], idx):
         """Dfs combination generator, dfs so a benchmark solution is found as soon as possible"""
-        if len(combo) == 2:
+        if len(combo) == 1:
             # tqdm.write(f"{idx} : {combo[0]} : {self.key(combo[0])}")
-            yield combo[1]
+            yield combo[0]
+        if len(combo) == 2:
+            yield combo[:2]
         if (reason := self.prune(combo, self.toppings[idx:]))[0] != Prune.NONE:
             # tqdm.write(f"PRUNE : {reason} : {[str(topping) for topping in combo]}")
             return reason
@@ -124,11 +126,7 @@ class Optimizer:
 
     def prune(self, combo: List[Topping], toppings: List[Topping]):
         """Prune a combination subtree from consideration if it is unfavorable"""
-        failures = Prune.NONE
-
-        # length 1 means only tart topping
-        if(len(combo) == 1):
-            return failures, [], [], 0
+        failures = Prune.NONE 
         
         floor_failures = []
         overall_set_requirements = {}
