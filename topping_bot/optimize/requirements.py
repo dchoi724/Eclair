@@ -367,17 +367,31 @@ class Requirements:
         return [valid for valid in self.adjusted_valid if valid.op.str == "<=" and valid.target == Decimal(0)]
 
     def best_possible_set_effect(self, combo: List[Topping], substats: Tuple[Type], non_match_count: int):
-        best_set_bonuses = {req: Decimal(0) for req in (2, 3, 5, 6)}
-
-        non_matching_toppings = sum(1 for t in combo if t.flavor not in substats)
+        best_set_bonuses = {
+            2: {},
+            3: {},
+            5: {},
+            6: {},
+        }
 
         for s in substats:
+            matching_count = sum(1 for t in combo if t.flavor == s)
             for req, bonus in INFO[s]["combos"]:
-                if non_match_count + non_matching_toppings <= 6 - req:
-                    best_set_bonuses[req] = max(best_set_bonuses[req], bonus)
+                if req <= matching_count:
+                    best_set_bonuses[req][s] = max(best_set_bonuses[req].get(s, Decimal(0)), bonus)
 
-        return max(
-            best_set_bonuses[2] + best_set_bonuses[3],
-            best_set_bonuses[5],
-            best_set_bonuses[6]
-        )
+        # check valid 2+3 combinations with different substats
+        best_2_3_combo = Decimal(0)
+        for s2, bonus2 in best_set_bonuses[2].items():
+            for s3, bonus3 in best_set_bonuses[3].items():
+                if s2 != s3:
+                    best_2_3_combo = max(best_2_3_combo, bonus2 + bonus3)
+
+        # best 2/3/5/6-piece bonuses (from any single substat)
+        best_2 = max(best_set_bonuses[2].values(), default=Decimal(0))
+        best_3 = max(best_set_bonuses[3].values(), default=Decimal(0))
+        best_5 = max(best_set_bonuses[5].values(), default=Decimal(0))
+        best_6 = max(best_set_bonuses[6].values(), default=Decimal(0))
+
+        return max(best_2_3_combo, best_2, best_3, best_5, best_6)
+                
