@@ -240,8 +240,13 @@ class ToppingSet:
     def __hash__(self):
         return id(self)
 
-    def raw(self, substat: Type):
-        return sum(topping.value(substat) for topping in self.toppings)
+    def raw(self, substat: Type, tart: Topping = None):
+        total = sum(topping.value(substat) for topping in self.toppings)
+
+        if tart and tart.substat == substat:
+            total += tart.target
+            
+        return total
 
     def set_effect(self, substat: Type):
         """Value of the set bonus given topping set makeup"""
