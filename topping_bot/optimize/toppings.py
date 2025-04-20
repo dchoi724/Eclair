@@ -20,6 +20,7 @@ class Resonance(Enum):
     DECEITFUL = "Deceitful"
     TRUTHFUL = "Truthful"
     SACRED_VOW = "Sacred Vow"
+    FLAMING = "Flaming"
 
 
 class Type(Enum):
