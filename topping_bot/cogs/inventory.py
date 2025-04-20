@@ -528,3 +528,30 @@ class Inventory(Cog, description="View and update your topping inventory"):
                 "Use !inv help to learn more",
             ],
         )
+
+    @inv.command(aliases=[], brief="Download Inventory", description="Download your topping inventory")
+    async def download(self, ctx):
+        fp = DATA_PATH / f"{ctx.message.author.id}.csv"
+        if not fp.exists():
+            await send_msg(
+                ctx,
+                title="Err: No Topping Inventory",
+                description=[
+                    "You have not submitted a topping video.",
+                    "Please use !inv add <video> to update your inventory.",
+                    "Use !tutorial to learn more.",
+                ],
+            )
+            return
+        
+        embed = await new_embed(
+            title="Topping Inventory Download",
+            description=[
+                "Your topping inventory is ready for download",
+            ],
+        )
+
+        await ctx.reply(
+            embed=embed,
+            file=discord.File(fp, filename=f"{ctx.message.author.id}.csv")
+        )
