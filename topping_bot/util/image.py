@@ -345,7 +345,7 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None, tart=None)
             stroke_fill="rgb(0, 0, 0)",
             stroke_width=2,
         )
-        left_percent = topping_set.raw(left)
+        left_percent = topping_set.raw(left, tart)
         draw.text(
             (520, 75 * i + 560),
             f"{str(left_percent) + '%' if left_percent else '-'}",
@@ -363,7 +363,7 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None, tart=None)
             stroke_fill="rgb(0, 0, 0)",
             stroke_width=2,
         )
-        right_percent = topping_set.raw(right)
+        right_percent = topping_set.raw(right, tart)
         draw.text(
             (1050, 75 * i + 560),
             f"{str(right_percent) + '%' if right_percent else '-'}",
