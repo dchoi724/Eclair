@@ -21,6 +21,8 @@ class Resonance(Enum):
     TRUTHFUL = "Truthful"
     SACRED_VOW = "Sacred Vow"
     FLAMING = "Flaming"
+    INDOLENT = "Indolent"
+    PASSIONATE = "Passionate"
 
 
 class Type(Enum):

@@ -133,6 +133,20 @@ TOPPINGS = {
         Type.CD: Image.open(TOPPING_PATH / "flaming" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
         Type.ATKSPD: Image.open(TOPPING_PATH / "flaming" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
         Type.CRIT: Image.open(TOPPING_PATH / "flaming" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
+    },
+    Resonance.INDOLENT: {
+        Type.DMGRES: Image.open(TOPPING_PATH / "indolent" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
+        Type.ATK: Image.open(TOPPING_PATH / "indolent" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
+        Type.CD: Image.open(TOPPING_PATH / "indolent" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
+        Type.ATKSPD: Image.open(TOPPING_PATH / "indolent" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
+        Type.CRIT: Image.open(TOPPING_PATH / "indolent" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
+    },
+    Resonance.PASSIONATE: {
+        Type.DMGRES: Image.open(TOPPING_PATH / "passionate" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
+        Type.ATK: Image.open(TOPPING_PATH / "passionate" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
+        Type.CD: Image.open(TOPPING_PATH / "passionate" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
+        Type.ATKSPD: Image.open(TOPPING_PATH / "passionate" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
+        Type.CRIT: Image.open(TOPPING_PATH / "passionate" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
     }
 }
 STATIC = {
