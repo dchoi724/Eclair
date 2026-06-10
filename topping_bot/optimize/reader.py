@@ -297,7 +297,7 @@ def extract_topping_data(unique_frames: Iterable[np.ndarray], debug=False, verbo
                 if active_pixels.size == 0:
                     return None
 
-                # to capture new resonance template
+                # DATA UPDATES: to capture new resonance template
                 # cv2.imwrite(str(READER_PATH / "resonant" / "new.jpg"), title)
 
                 metatype = None

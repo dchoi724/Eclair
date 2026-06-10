@@ -27,6 +27,15 @@ class Resonance(Enum):
     SEAFARER = "Seafarer"
     DESTINED = "Destined"
     SILENT = "Silent"
+    BLOOMING = "Blooming"
+    CHRONO = "Chrono"
+    CROSSED_FATES = "Crossed Fates"
+    GAMBIT = "Gambit"
+    LIFE_ENERGY = "Life Energy"
+    LOOMING_DARK = "Looming Dark"
+    RESEARCH_DRIVEN = "Research-driven"
+    UNISON = "Unison"
+    VERDIGRIS = "Verdigris"
 
 class Type(Enum):
     # in-game substats
