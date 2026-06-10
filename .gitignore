@@ -17,6 +17,7 @@ debug/
 .idea/
 log.txt
 err.txt
+report.html
 
 # guilds
 guilds/

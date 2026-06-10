@@ -31,5 +31,9 @@ upload images (i.e. inventories)
 1. Add `DEBUG_BOT=True` to `.env`
 2. Run with `poetry run python topping_bot/bot.py`
 
+## Test
+1. Run the following `poetry run pytest`
+2. Optional: Run the following to generate a report.html in project root. `poetry run pytest -v --html=report.html --self-contained-html`
+
 ## Further Documentation
 Please see `docs` for more info on how certain aspects of the bot works
