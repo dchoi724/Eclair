@@ -13,39 +13,43 @@ from topping_bot.util.utility import order_path
 
 TOPPING_PATH = STATIC_PATH / "topping"
 
-_BASE_TYPES = [Type.DMGRES, Type.ATK, Type.CD, Type.ATKSPD, Type.CRIT]
+_ALL_BASE_TYPES = [Type.DMGRES, Type.ATK, Type.CD, Type.ATKSPD, Type.CRIT,
+                   Type.HP, Type.BUFF, Type.DEF, Type.BUFFRES, Type.CRITRES]
+_RESO_TYPES = [Type.DMGRES, Type.ATK, Type.CD, Type.ATKSPD, Type.CRIT]
 
 RESONANCE_FOLDER = {
-    Resonance.MOONKISSED:      ("moonkissed",    _BASE_TYPES),
-    Resonance.TRIO:            ("trio",           _BASE_TYPES),
-    Resonance.DRACONIC:        ("draconic",       _BASE_TYPES),
-    Resonance.TROPICAL_ROCK:   ("tropical",       _BASE_TYPES),
-    Resonance.SEA_SALT:        ("sea",            _BASE_TYPES),
-    Resonance.RADIANT_CHEESE:  ("cheese",         _BASE_TYPES),
-    Resonance.FROSTED_CRYSTAL: ("crystal",        _BASE_TYPES),
-    Resonance.LIFESPROUTING:   ("life-sprouting", _BASE_TYPES),
-    Resonance.DESTRUCTIVE:     ("destructive",    _BASE_TYPES),
-    Resonance.FRAGRANT:        ("fragrant",       _BASE_TYPES),
-    Resonance.IRIS_GEM:        ("iris",           _BASE_TYPES),
-    Resonance.DECEITFUL:       ("deceitful",      _BASE_TYPES),
-    Resonance.TRUTHFUL:        ("truthful",       _BASE_TYPES),
-    Resonance.SACRED_VOW:      ("sacred",         _BASE_TYPES),
-    Resonance.FLAMING:         ("flaming",        _BASE_TYPES),
-    Resonance.INDOLENT:        ("indolent",       _BASE_TYPES),
-    Resonance.PASSIONATE:      ("passionate",     _BASE_TYPES),
-    Resonance.FUZZY_WUZZY:     ("fuzzy_wuzzy",    _BASE_TYPES),
-    Resonance.SEAFARER:        ("seafarer",       _BASE_TYPES),
+    Resonance.MOONKISSED:      ("moonkissed",    _RESO_TYPES),
+    Resonance.TRIO:            ("trio",           _RESO_TYPES),
+    Resonance.DRACONIC:        ("draconic",       _RESO_TYPES),
+    Resonance.TROPICAL_ROCK:   ("tropical",       _RESO_TYPES),
+    Resonance.SEA_SALT:        ("sea",            _RESO_TYPES),
+    Resonance.RADIANT_CHEESE:  ("cheese",         _RESO_TYPES),
+    Resonance.FROSTED_CRYSTAL: ("crystal",        _RESO_TYPES),
+    Resonance.LIFESPROUTING:   ("life-sprouting", _RESO_TYPES),
+    Resonance.DESTRUCTIVE:     ("destructive",    _RESO_TYPES),
+    Resonance.FRAGRANT:        ("fragrant",       _RESO_TYPES),
+    Resonance.IRIS_GEM:        ("iris",           _RESO_TYPES),
+    Resonance.DECEITFUL:       ("deceitful",      _RESO_TYPES),
+    Resonance.TRUTHFUL:        ("truthful",       _RESO_TYPES),
+    Resonance.SACRED_VOW:      ("sacred",         _RESO_TYPES),
+    Resonance.FLAMING:         ("flaming",        _RESO_TYPES),
+    Resonance.INDOLENT:        ("indolent",       _RESO_TYPES),
+    Resonance.PASSIONATE:      ("passionate",     _RESO_TYPES),
+    Resonance.FUZZY_WUZZY:     ("fuzzy_wuzzy",    _RESO_TYPES),
+    Resonance.SEAFARER:        ("seafarer",       _RESO_TYPES),
+    Resonance.DESTINED:        ("destined",       _ALL_BASE_TYPES),
 }
 
 TOPPINGS = {
     Resonance.NORMAL: {
-        t: Image.open(TOPPING_PATH / f"{INFO[t]['filename']}.png").resize((101, 148))
-        for t in [Type.DMGRES, Type.ATK, Type.CD, Type.ATKSPD, Type.CRIT,
-                  Type.HP, Type.BUFF, Type.DEF, Type.BUFFRES, Type.CRITRES]
+        t: Image.open(
+            TOPPING_PATH / f"{INFO[t]['filename']}.png").resize((101, 148))
+        for t in _ALL_BASE_TYPES
     },
     **{
         resonance: {
-            t: Image.open(TOPPING_PATH / folder / f"{INFO[t]['filename']}.png").resize((101, 148))
+            t: Image.open(TOPPING_PATH / folder /
+                          f"{INFO[t]['filename']}.png").resize((101, 148))
             for t in types
         }
         for resonance, (folder, types) in RESONANCE_FOLDER.items()
@@ -65,7 +69,8 @@ POSITION = (
     (Position.REAR, Image.open(MISC_PATH / "rear_pos.png").resize((64, 43))),
 )
 
-GACHA_BACKGROUND = Image.open(MISC_PATH / "cookie_get.png").resize((1920, 1040)).filter(ImageFilter.GaussianBlur(3))
+GACHA_BACKGROUND = Image.open(
+    MISC_PATH / "cookie_get.png").resize((1920, 1040)).filter(ImageFilter.GaussianBlur(3))
 SHINE_PATH = MISC_PATH / "shine"
 
 TOPPING_BACKGROUND = Image.open(MISC_PATH / "loading.png").resize((1080, 1080))
@@ -80,8 +85,10 @@ GUAGE = {
     "yellow": Image.open(MISC_PATH / "gauge" / "old-yellow.png").convert("RGBA"),
 }
 
-GACHA_INV_BACKGROUND = Image.open(MISC_PATH / "inv_background.png").resize((1200, 1120))
-LOCK_INV = Image.open(MISC_PATH / "lock.png").resize((50, 61)).convert("LA").convert("RGBA")
+GACHA_INV_BACKGROUND = Image.open(
+    MISC_PATH / "inv_background.png").resize((1200, 1120))
+LOCK_INV = Image.open(MISC_PATH / "lock.png").resize((50,
+                                                      61)).convert("LA").convert("RGBA")
 GUAGE_INV = {
     "back": Image.open(MISC_PATH / "gauge" / "old-back.png").resize((32, 27)).convert("RGBA"),
     "green": Image.open(MISC_PATH / "gauge" / "old-green.png").resize((32, 24)).convert("RGBA"),
@@ -113,7 +120,7 @@ def image_midline(image):
 def toppings_to_images(toppings: List[Tuple[int, Topping]], user_id, show_index=False):
     images = []
 
-    for i, subset in enumerate(toppings[i : i + 25] for i in range(0, len(toppings), 25)):
+    for i, subset in enumerate(toppings[i: i + 25] for i in range(0, len(toppings), 25)):
         fp = TMP_PATH / f"{user_id}-{i}.png"
 
         image = TOPPING_BACKGROUND.copy()
@@ -135,8 +142,10 @@ def toppings_to_images(toppings: List[Tuple[int, Topping]], user_id, show_index=
                     (x + 47, y + 21),
                     TOPPINGS[topping.resonance][topping.flavor],
                 )
-                sub_left = "\n".join(INFO[sub[0]]["short"] for sub in topping.substats[1:])
-                sub_right = "\n".join(str(sub[1]) for sub in topping.substats[1:])
+                sub_left = "\n".join(INFO[sub[0]]["short"]
+                                     for sub in topping.substats[1:])
+                sub_right = "\n".join(str(sub[1])
+                                      for sub in topping.substats[1:])
                 draw.multiline_text(
                     (x + 28, y + 22),
                     sub_left,
@@ -167,6 +176,7 @@ def toppings_to_images(toppings: List[Tuple[int, Topping]], user_id, show_index=
         images.append(fp)
     return images
 
+
 def topping_set_to_image(topping_set: ToppingSet, user_id, name=None, tart=None):
     fp = TMP_PATH / f"{user_id}.png"
 
@@ -176,7 +186,7 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None, tart=None)
     # draw background rectangles
     # - outer_padding = 10
     # - inter_item_padding = 20
-    
+
     # toppings box
     draw.rounded_rectangle(
         ((10, 10), (1070, 530)),
@@ -208,7 +218,7 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None, tart=None)
         outline="rgb(50, 51, 53)",
         width=2,
         radius=30,
-    ) 
+    )
     # set bonus box 3
     draw.rounded_rectangle(
         ((730, 955), (1070, 1070)),
@@ -223,21 +233,26 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None, tart=None)
     image.paste(STATIC["holder"], (25, 25), STATIC["holder"])
 
     def topping_text_sort(x: Topping):
-        temp_subs = " : ".join(f"{INFO[sub[0]]['short']} {sub[1]}" for sub in x.substats[1:])
+        temp_subs = " : ".join(
+            f"{INFO[sub[0]]['short']} {sub[1]}" for sub in x.substats[1:])
         return draw.textlength(temp_subs, font=font)
 
     topping_set.toppings.sort(key=topping_text_sort)
     toppings = topping_set.toppings
-    toppings = [toppings[3], toppings[1], toppings[0], toppings[2], toppings[4]]
+    toppings = [toppings[3], toppings[1],
+                toppings[0], toppings[2], toppings[4]]
 
     # draw the toppings
     for i, topping in enumerate(toppings):
-        topping_img = TOPPINGS[topping.resonance][topping.flavor].resize((135, 198)).rotate(i * -72, expand=True)
+        topping_img = TOPPINGS[topping.resonance][topping.flavor].resize(
+            (135, 198)).rotate(i * -72, expand=True)
         image.paste(topping_img, coords[i], topping_img)
         image.paste(STATIC["blank"], (1004, 100 * i + 34), STATIC["blank"])
-        topping_img = TOPPINGS[topping.resonance][topping.flavor].resize((46, 67))
+        topping_img = TOPPINGS[topping.resonance][topping.flavor].resize(
+            (46, 67))
         image.paste(topping_img, (1007, 100 * i + 39), topping_img)
-        subs = " : ".join(f"{INFO[sub[0]]['short']} {sub[1]}" for sub in topping.substats[1:])
+        subs = " : ".join(
+            f"{INFO[sub[0]]['short']} {sub[1]}" for sub in topping.substats[1:])
         draw.text(
             (990, 100 * i + 36),
             subs,
@@ -301,12 +316,15 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None, tart=None)
 
     complete_toppings = topping_set.toppings
     if tart:
-        complete_toppings = complete_toppings + [Topping(resonance=Resonance.NORMAL, substats=[(tart.substat, tart.target)])]
-        
+        complete_toppings = complete_toppings + \
+            [Topping(resonance=Resonance.NORMAL, substats=[
+                     (tart.substat, tart.target)])]
+
     for substat in INFO.keys():
         possible_set_bonuses = INFO[substat]["view_combos"]
-        
-        count_matched = len([t for t in complete_toppings if t.flavor == substat])
+
+        count_matched = len(
+            [t for t in complete_toppings if t.flavor == substat])
 
         for count, bonus in possible_set_bonuses:
             if count <= count_matched:
@@ -327,7 +345,7 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None, tart=None)
             stroke_width=2,
             anchor="ma",
         )
-        
+
         font = ImageFont.truetype(str(TOPPING_PATH / "font.otf"), size=38)
         draw.text(
             (360 * i + 180, 1015),
@@ -345,7 +363,8 @@ def topping_set_to_image(topping_set: ToppingSet, user_id, name=None, tart=None)
         if cookie and cookie.head.exists():
             head = Image.open(cookie.head)
             factor = head.size[1] / 125
-            head = head.resize((int(head.size[0] / factor), int(head.size[1] / factor)))
+            head = head.resize(
+                (int(head.size[0] / factor), int(head.size[1] / factor)))
             image.alpha_composite(head, (25, 25))
 
     image.save(fp)
@@ -371,28 +390,40 @@ def gacha_pull_to_image(pull: List, gacha, user_id):
 
     mods = defaultdict(int)
 
-    stone_font = ImageFont.truetype(str(TOPPING_PATH / "old_font.otf"), size=46)
-    twenty_stone_font = ImageFont.truetype(str(TOPPING_PATH / "old_font.otf"), size=44)
-    banner_stone_font = ImageFont.truetype(str(TOPPING_PATH / "old_font.otf"), size=28)
-    fraction_font = ImageFont.truetype(str(TOPPING_PATH / "old_font.otf"), size=28)
+    stone_font = ImageFont.truetype(
+        str(TOPPING_PATH / "old_font.otf"), size=46)
+    twenty_stone_font = ImageFont.truetype(
+        str(TOPPING_PATH / "old_font.otf"), size=44)
+    banner_stone_font = ImageFont.truetype(
+        str(TOPPING_PATH / "old_font.otf"), size=28)
+    fraction_font = ImageFont.truetype(
+        str(TOPPING_PATH / "old_font.otf"), size=28)
     for row, y in ((pull[:5], 360), (pull[5:], 720)):
         for (cookie, amount, stored), x in zip(row, (400, 680, 960, 1240, 1520)):
             if amount == 20:
                 stand = Image.open(cookie.stand)
-                stand = stand.resize((int(stand.width / 1.15), int(stand.height / 1.15)))
+                stand = stand.resize(
+                    (int(stand.width / 1.15), int(stand.height / 1.15)))
                 stand_midline = image_midline(stand)
 
-                shine = Image.open(SHINE_PATH / f"{cookie.rarity.value.lower().replace(' ', '')}.png")
+                shine = Image.open(
+                    SHINE_PATH / f"{cookie.rarity.value.lower().replace(' ', '')}.png")
                 shine = shine.crop(shine.getbbox())
-                shine = shine.resize((int(shine.width * 1.15), int(shine.height * 1.15)))
+                shine = shine.resize(
+                    (int(shine.width * 1.15), int(shine.height * 1.15)))
 
-                image.alpha_composite(shine, (x - (shine.width // 2), y + 165 - shine.height))
-                image.alpha_composite(stand, (x - stand_midline, y + 115 - stand.height))
+                image.alpha_composite(
+                    shine, (x - (shine.width // 2), y + 165 - shine.height))
+                image.alpha_composite(
+                    stand, (x - stand_midline, y + 115 - stand.height))
 
                 if not gacha.is_unlock(inv=stored, amount=amount):
-                    stone = Image.open(cookie.stone(ascended=gacha.is_ascended(pk=str(cookie.id))))
-                    stone = stone.resize((60, 60)) if gacha.is_ascended(pk=str(cookie.id)) else stone.resize((58, 58))
-                    image.alpha_composite(stone, (x - 68, y + 44 + (1 if gacha.is_ascended(pk=str(cookie.id)) else 0)))
+                    stone = Image.open(cookie.stone(
+                        ascended=gacha.is_ascended(pk=str(cookie.id))))
+                    stone = stone.resize((60, 60)) if gacha.is_ascended(
+                        pk=str(cookie.id)) else stone.resize((58, 58))
+                    image.alpha_composite(
+                        stone, (x - 68, y + 44 + (1 if gacha.is_ascended(pk=str(cookie.id)) else 0)))
                     draw.text(
                         (x + 22, y + 60),
                         f"x{amount}",
@@ -406,8 +437,10 @@ def gacha_pull_to_image(pull: List, gacha, user_id):
                     image.alpha_composite(NEW, (x - 140, y - 140))
 
                 banner = Image.open(cookie.banner)
-                banner = banner.resize((int(banner.width / 1.5), int(banner.height / 1.5)))
-                image.alpha_composite(banner, (x - (banner.width // 2), y + 107))
+                banner = banner.resize(
+                    (int(banner.width / 1.5), int(banner.height / 1.5)))
+                image.alpha_composite(
+                    banner, (x - (banner.width // 2), y + 107))
 
                 draw.text(
                     (x, y + 116),
@@ -419,16 +452,21 @@ def gacha_pull_to_image(pull: List, gacha, user_id):
                     anchor="mt",
                 )
             else:
-                stone = Image.open(cookie.stone(ascended=gacha.is_ascended(pk=str(cookie.id))))
+                stone = Image.open(cookie.stone(
+                    ascended=gacha.is_ascended(pk=str(cookie.id))))
 
                 if gacha.is_ascended(pk=str(cookie.id)):
-                    stone = stone.crop((0, 0, stone.width - 2, stone.height - 2))
+                    stone = stone.crop(
+                        (0, 0, stone.width - 2, stone.height - 2))
 
-                benchmark = 160 if gacha.is_ascended(pk=str(cookie.id)) else 154
+                benchmark = 160 if gacha.is_ascended(
+                    pk=str(cookie.id)) else 154
                 stone = stone.crop(stone.getbbox())
-                stone = stone.resize((int(stone.width / (stone.height / benchmark)), benchmark))
+                stone = stone.resize(
+                    (int(stone.width / (stone.height / benchmark)), benchmark))
                 image.alpha_composite(
-                    stone, (x - (stone.width // 2), y - 90 + (2 if gacha.is_ascended(pk=str(cookie.id)) else 0))
+                    stone, (x - (stone.width // 2), y - 90 +
+                            (2 if gacha.is_ascended(pk=str(cookie.id)) else 0))
                 )
                 draw.text(
                     (x - 16, y + 50),
@@ -455,7 +493,8 @@ def gacha_pull_to_image(pull: List, gacha, user_id):
 
                 left = GUAGE["back"].crop((0, 0, 25, GUAGE["back"].height))
                 middle = GUAGE["back"].crop((25, 0, 35, GUAGE["back"].height))
-                right = GUAGE["back"].crop((35, 0, GUAGE["back"].width, GUAGE["back"].height))
+                right = GUAGE["back"].crop(
+                    (35, 0, GUAGE["back"].width, GUAGE["back"].height))
 
                 image.alpha_composite(left, (x - 115, y + 103))
                 for offset in range(0, 180, 10):
@@ -473,7 +512,8 @@ def gacha_pull_to_image(pull: List, gacha, user_id):
                     image.alpha_composite(left, (x - 114, y + 104))
                     offset = 0
                     for pixel in range(int(178 * ((upper / denom) * (1 + thresh) - thresh))):
-                        image.alpha_composite(middle, (x - 89 + offset, y + 104))
+                        image.alpha_composite(
+                            middle, (x - 89 + offset, y + 104))
                         offset += 1
                     image.alpha_composite(right, (x - 89 + offset, y + 104))
 
@@ -503,7 +543,8 @@ def gacha_pull_to_image(pull: List, gacha, user_id):
             if gacha.inventory[str(cookie.id)] > 490:
                 mileage_msg = f"x{gacha.single_mileage(cookie, amount, gacha.inventory[str(cookie.id)])}"
                 essence_msg = f"x{min(gacha.inventory[str(cookie.id)] - 490, amount)}"
-                mileage_font = ImageFont.truetype(str(TOPPING_PATH / "old_font.otf"), size=26)
+                mileage_font = ImageFont.truetype(
+                    str(TOPPING_PATH / "old_font.otf"), size=26)
                 length = (
                     40
                     + 2
@@ -515,7 +556,8 @@ def gacha_pull_to_image(pull: List, gacha, user_id):
                 )
 
                 soul_essence = Image.open(cookie.essence).resize((40, 40))
-                image.alpha_composite(soul_essence, (x - int(length / 2) - 2, y + 161))
+                image.alpha_composite(
+                    soul_essence, (x - int(length / 2) - 2, y + 161))
                 draw.text(
                     (x - int(length / 2) + 40 + 2 - 2, y + 170),
                     essence_msg,
@@ -529,7 +571,9 @@ def gacha_pull_to_image(pull: List, gacha, user_id):
                 image.alpha_composite(
                     MILEAGE,
                     (
-                        x - int(length / 2) + 40 + 2 + int(draw.textlength(essence_msg, font=mileage_font)) + 10 - 2,
+                        x - int(length / 2) + 40 + 2 +
+                        int(draw.textlength(essence_msg,
+                            font=mileage_font)) + 10 - 2,
                         y + 163,
                     ),
                 )
@@ -555,9 +599,12 @@ def gacha_pull_to_image(pull: List, gacha, user_id):
                 )
             else:
                 mileage_msg = f"x{gacha.single_mileage(cookie, amount, gacha.inventory[str(cookie.id)])}"
-                mileage_font = ImageFont.truetype(str(TOPPING_PATH / "old_font.otf"), size=26)
-                length = 35 + 3 + draw.textlength(mileage_msg, font=mileage_font)
-                image.alpha_composite(MILEAGE, (x - int(length / 2) - 2, y + 163))
+                mileage_font = ImageFont.truetype(
+                    str(TOPPING_PATH / "old_font.otf"), size=26)
+                length = 35 + 3 + \
+                    draw.textlength(mileage_msg, font=mileage_font)
+                image.alpha_composite(
+                    MILEAGE, (x - int(length / 2) - 2, y + 163))
                 draw.text(
                     (x - int(length / 2) + 35 + 3 - 2, y + 170),
                     f"x{gacha.single_mileage(cookie, amount, gacha.inventory[str(cookie.id)])}",
@@ -586,11 +633,13 @@ def gacha_pull_to_image(pull: List, gacha, user_id):
 
 def gacha_inv_to_image(gacha, user_id):
     images = []
-    fraction_font = ImageFont.truetype(str(TOPPING_PATH / "old_font.otf"), size=15)
-    highest_font = ImageFont.truetype(str(TOPPING_PATH / "old_font.otf"), size=19)
+    fraction_font = ImageFont.truetype(
+        str(TOPPING_PATH / "old_font.otf"), size=15)
+    highest_font = ImageFont.truetype(
+        str(TOPPING_PATH / "old_font.otf"), size=19)
 
     cookies = Cookie.all()
-    for i, subset in enumerate(cookies[i : i + 25] for i in range(0, len(cookies), 25)):
+    for i, subset in enumerate(cookies[i: i + 25] for i in range(0, len(cookies), 25)):
         fp = TMP_PATH / f"gacha-inv-{user_id}-{i}.png"
 
         image = GACHA_INV_BACKGROUND.copy()
@@ -598,7 +647,7 @@ def gacha_inv_to_image(gacha, user_id):
 
         x_base, y_base = 216, 220
         left_line, top_line = 70, 15
-        for y_mult, row in enumerate(subset[i : i + 5] for i in range(0, len(subset), 5)):
+        for y_mult, row in enumerate(subset[i: i + 5] for i in range(0, len(subset), 5)):
             for x_mult, cookie in enumerate(row):
                 card = Image.open(cookie.card).resize((196, 196))
 
@@ -607,50 +656,64 @@ def gacha_inv_to_image(gacha, user_id):
                 frame_bottom = frame.crop((0, 180, 196, 220))
 
                 role = Image.open(cookie.role_icon)
-                role = role.resize((int(role.width / 2.5), int(role.height / 2.5)))
+                role = role.resize(
+                    (int(role.width / 2.5), int(role.height / 2.5)))
 
                 if not gacha.is_unlocked(pk=str(cookie.id)):
                     card = card.convert("LA").convert("RGBA")
                     frame_top = frame_top.convert("LA").convert("RGBA")
                     frame_bottom = frame_bottom.convert("LA").convert("RGBA")
 
-                image.alpha_composite(card, (left_line + x_base * x_mult, top_line + 220 * y_mult))
-                image.alpha_composite(frame_top, (left_line + x_base * x_mult, top_line + y_base * y_mult))
-                image.alpha_composite(frame_bottom, (left_line + x_base * x_mult, top_line + 170 + y_base * y_mult))
-                image.alpha_composite(role, (left_line + x_base * x_mult + 145, top_line + y_base * y_mult + 15))
+                image.alpha_composite(
+                    card, (left_line + x_base * x_mult, top_line + 220 * y_mult))
+                image.alpha_composite(
+                    frame_top, (left_line + x_base * x_mult, top_line + y_base * y_mult))
+                image.alpha_composite(
+                    frame_bottom, (left_line + x_base * x_mult, top_line + 170 + y_base * y_mult))
+                image.alpha_composite(
+                    role, (left_line + x_base * x_mult + 145, top_line + y_base * y_mult + 15))
 
                 if gacha.is_unlocked(pk=str(cookie.id)):
                     if gacha.inventory[str(cookie.id)] >= 40:
                         grade = Image.open(gacha.grade(pk=str(cookie.id)))
-                        grade = grade.resize((int(grade.width / 1.5), int(grade.height / 1.5)))
+                        grade = grade.resize(
+                            (int(grade.width / 1.5), int(grade.height / 1.5)))
                         image.alpha_composite(
                             grade,
                             (
-                                left_line + x_base * x_mult - (grade.width // 2) + 100,
-                                top_line + y_base * y_mult - (grade.height // 2) + 138,
+                                left_line + x_base * x_mult -
+                                (grade.width // 2) + 100,
+                                top_line + y_base * y_mult -
+                                (grade.height // 2) + 138,
                             ),
                         )
                 else:
-                    image.alpha_composite(LOCK_INV, (left_line + x_base * x_mult + 10, top_line + y_base * y_mult + 10))
+                    image.alpha_composite(
+                        LOCK_INV, (left_line + x_base * x_mult + 10, top_line + y_base * y_mult + 10))
 
                 num, denom = gacha.fraction(gacha.inventory[str(cookie.id)])
 
                 if denom != 1:
-                    middle = GUAGE_INV["back"].crop((16, 0, 17, GUAGE_INV["back"].height))
-                    right = GUAGE_INV["back"].crop((18, 0, GUAGE_INV["back"].width, GUAGE_INV["back"].height))
+                    middle = GUAGE_INV["back"].crop(
+                        (16, 0, 17, GUAGE_INV["back"].height))
+                    right = GUAGE_INV["back"].crop(
+                        (18, 0, GUAGE_INV["back"].width, GUAGE_INV["back"].height))
 
                     for offset in range(0, 136):
                         image.alpha_composite(
                             middle,
-                            (left_line + x_base * x_mult + 10 + 19 + offset, top_line + y_base * y_mult + 169),
+                            (left_line + x_base * x_mult + 10 + 19 +
+                             offset, top_line + y_base * y_mult + 169),
                         )
                     image.alpha_composite(
-                        right, (left_line + x_base * x_mult + 10 + 155, top_line + y_base * y_mult + 169)
+                        right, (left_line + x_base * x_mult + 10 +
+                                155, top_line + y_base * y_mult + 169)
                     )
 
                     yellow = GUAGE_INV["yellow"]
                     if not gacha.is_unlocked(pk=str(cookie.id)):
-                        yellow = ImageEnhance.Brightness(yellow.convert("LA")).enhance(0.45).convert("RGBA")
+                        yellow = ImageEnhance.Brightness(
+                            yellow.convert("LA")).enhance(0.45).convert("RGBA")
 
                     middle = yellow.crop((16, 0, 17, yellow.height))
                     right = yellow.crop((18, 0, yellow.width, yellow.height))
@@ -659,15 +722,18 @@ def gacha_inv_to_image(gacha, user_id):
                     for pixel in range(int(136 * (num / denom))):
                         image.alpha_composite(
                             middle,
-                            (left_line + x_base * x_mult + 10 + 19 + offset, top_line + y_base * y_mult + 170),
+                            (left_line + x_base * x_mult + 10 + 19 +
+                             offset, top_line + y_base * y_mult + 170),
                         )
                         offset += 1
                     image.alpha_composite(
-                        right, (left_line + x_base * x_mult + 10 + 19 + offset, top_line + y_base * y_mult + 170)
+                        right, (left_line + x_base * x_mult + 10 + 19 +
+                                offset, top_line + y_base * y_mult + 170)
                     )
 
                     draw.text(
-                        (left_line + x_base * x_mult + 112, top_line + y_base * y_mult + 175),
+                        (left_line + x_base * x_mult + 112,
+                         top_line + y_base * y_mult + 175),
                         f"{num}/{denom}" if denom != 1 else "MAX",
                         font=fraction_font,
                         fill="rgb(255, 255, 255)",
@@ -676,27 +742,34 @@ def gacha_inv_to_image(gacha, user_id):
                         anchor="mt",
                     )
 
-                    stone = Image.open(cookie.stone(ascended=gacha.is_ascended(pk=str(cookie.id))))
+                    stone = Image.open(cookie.stone(
+                        ascended=gacha.is_ascended(pk=str(cookie.id))))
                     stone = stone.resize((34, 34))
 
                     if gacha.is_ascended(pk=str(cookie.id)):
-                        stone = stone.crop((0, 0, stone.width - 1, stone.height - 1))
+                        stone = stone.crop(
+                            (0, 0, stone.width - 1, stone.height - 1))
 
                     alpha = stone.getchannel("A")
 
-                    background = Image.new("RGBA", stone.size, color="rgb(0, 0, 0)")
+                    background = Image.new(
+                        "RGBA", stone.size, color="rgb(0, 0, 0)")
                     background.putalpha(alpha)
 
                     border_size = 4
-                    background = background.resize((background.size[0] + border_size, background.size[1] + border_size))
-                    background.alpha_composite(stone, (int(border_size / 2), int(border_size / 2)))
+                    background = background.resize(
+                        (background.size[0] + border_size, background.size[1] + border_size))
+                    background.alpha_composite(
+                        stone, (int(border_size / 2), int(border_size / 2)))
 
                     image.alpha_composite(
-                        background, (left_line + x_base * x_mult + 16, top_line + y_base * y_mult + 163)
+                        background, (left_line + x_base * x_mult +
+                                     16, top_line + y_base * y_mult + 163)
                     )
                 else:
                     draw.text(
-                        (left_line + x_base * x_mult + 98, top_line + y_base * y_mult + 174),
+                        (left_line + x_base * x_mult + 98,
+                         top_line + y_base * y_mult + 174),
                         "Highest Grade!",
                         font=highest_font,
                         fill="rgb(255, 224, 69)",
@@ -714,18 +787,21 @@ def gacha_inv_to_image(gacha, user_id):
 def cookie_to_image(cookie, gacha, user_id):
     fp = TMP_PATH / f"cookie-{user_id}.png"
 
-    image = Image.open(cookie.lobby).convert(mode="RGBA").crop((0, 35, 1200, 685)).resize((1920, 1040))
+    image = Image.open(cookie.lobby).convert(mode="RGBA").crop(
+        (0, 35, 1200, 685)).resize((1920, 1040))
     draw = ImageDraw.Draw(image)
 
     # Cookie Sprite
     cookie_stand = Image.open(cookie.stand)
-    cookie_stand = cookie_stand.resize((int(cookie_stand.width * 1.2), int(cookie_stand.height * 1.2)))
+    cookie_stand = cookie_stand.resize(
+        (int(cookie_stand.width * 1.2), int(cookie_stand.height * 1.2)))
     cookie_stand_midline = image_midline(cookie_stand)
 
     if not gacha.is_unlocked(pk=str(cookie.id)):
         cookie_stand = ImageEnhance.Brightness(cookie_stand).enhance(0.72)
 
-    image.alpha_composite(cookie_stand, (686 - cookie_stand_midline, 680 - cookie_stand.height))
+    image.alpha_composite(
+        cookie_stand, (686 - cookie_stand_midline, 680 - cookie_stand.height))
 
     # Grade
     if gacha.is_unlocked(pk=str(cookie.id)):
@@ -736,14 +812,18 @@ def cookie_to_image(cookie, gacha, user_id):
                 1.2
             )
         else:
-            grade = grade.resize((int(grade.width * 1.4), int(grade.height * 1.4)))
-        image.alpha_composite(grade, (682 - (grade.width // 2), 708 if "fancy" in grade_fp.stem else 694))
+            grade = grade.resize(
+                (int(grade.width * 1.4), int(grade.height * 1.4)))
+        image.alpha_composite(
+            grade, (682 - (grade.width // 2), 708 if "fancy" in grade_fp.stem else 694))
 
     # Progress Bar
     num, denom = gacha.fraction(gacha.inventory[str(cookie.id)])
 
-    middle = GUAGE_COOKIE["back"].crop((16, 0, 17, GUAGE_COOKIE["back"].height))
-    right = GUAGE_COOKIE["back"].crop((18, 0, GUAGE_COOKIE["back"].width, GUAGE_COOKIE["back"].height))
+    middle = GUAGE_COOKIE["back"].crop(
+        (16, 0, 17, GUAGE_COOKIE["back"].height))
+    right = GUAGE_COOKIE["back"].crop(
+        (18, 0, GUAGE_COOKIE["back"].width, GUAGE_COOKIE["back"].height))
 
     for offset in range(261):
         image.alpha_composite(middle, (555 + offset, 791))
@@ -760,7 +840,8 @@ def cookie_to_image(cookie, gacha, user_id):
         offset += 1
     image.alpha_composite(right, (555 + offset, 792))
 
-    fraction_font = ImageFont.truetype(str(TOPPING_PATH / "old_font.otf"), size=24)
+    fraction_font = ImageFont.truetype(
+        str(TOPPING_PATH / "old_font.otf"), size=24)
     draw.text(
         (705, 801),
         f"{num}/{denom}" if denom != 1 else "MAX",
@@ -776,7 +857,8 @@ def cookie_to_image(cookie, gacha, user_id):
         image.alpha_composite(lock, (802, 772))
 
     # Soulstone
-    stone = Image.open(cookie.stone(ascended=gacha.is_ascended(pk=str(cookie.id))))
+    stone = Image.open(cookie.stone(
+        ascended=gacha.is_ascended(pk=str(cookie.id))))
     stone = stone.resize((66, 66))
 
     alpha = stone.getchannel("A")
@@ -784,8 +866,10 @@ def cookie_to_image(cookie, gacha, user_id):
     background.putalpha(alpha)
 
     border_size = 4
-    background = background.resize((background.size[0] + border_size, background.size[1] + border_size))
-    background.alpha_composite(stone, (int(border_size / 2), int(border_size / 2)))
+    background = background.resize(
+        (background.size[0] + border_size, background.size[1] + border_size))
+    background.alpha_composite(
+        stone, (int(border_size / 2), int(border_size / 2)))
 
     image.alpha_composite(background, (520, 776))
 
@@ -840,7 +924,8 @@ def cookie_to_image(cookie, gacha, user_id):
     banner = banner.resize((int(banner.width / 1.6), int(banner.height / 1.6)))
     image.alpha_composite(banner, (170, 130))
 
-    banner_stone_font = ImageFont.truetype(str(TOPPING_PATH / "old_font.otf"), size=26)
+    banner_stone_font = ImageFont.truetype(
+        str(TOPPING_PATH / "old_font.otf"), size=26)
 
     draw.text(
         (170 + banner.width // 2, 139),
@@ -853,7 +938,8 @@ def cookie_to_image(cookie, gacha, user_id):
     )
 
     # Cookie Name
-    banner_stone_font = ImageFont.truetype(str(TOPPING_PATH / "old_font.otf"), size=40)
+    banner_stone_font = ImageFont.truetype(
+        str(TOPPING_PATH / "old_font.otf"), size=40)
     draw.text(
         (184, 190),
         f"{cookie.name} Cookie",
@@ -886,7 +972,8 @@ def cookie_to_image(cookie, gacha, user_id):
     )
 
     role_icon = Image.open(cookie.role_icon)
-    role_icon = role_icon.resize((int(role_icon.width / 3), int(role_icon.height / 3)))
+    role_icon = role_icon.resize(
+        (int(role_icon.width / 3), int(role_icon.height / 3)))
     image.alpha_composite(role_icon, (192, 318))
     draw.text(
         (235, 322),
@@ -899,7 +986,8 @@ def cookie_to_image(cookie, gacha, user_id):
     )
 
     position = Image.open(cookie.position_icon)
-    position = position.resize((int(position.width / 1.5), int(position.height / 1.5)))
+    position = position.resize(
+        (int(position.width / 1.5), int(position.height / 1.5)))
     image.alpha_composite(position, (192, 376))
     position_color = {
         Position.FRONT: "rgb(205, 46, 49)",
@@ -927,12 +1015,13 @@ def order_to_image(order, bot_name):
         return fp
 
     front = [cookie for cookie in order.cookies if cookie.position == Position.FRONT]
-    middle = [cookie for cookie in order.cookies if cookie.position == Position.MIDDLE]
+    middle = [
+        cookie for cookie in order.cookies if cookie.position == Position.MIDDLE]
     rear = [cookie for cookie in order.cookies if cookie.position == Position.REAR]
 
-    front = [front[i : i + 10] for i in range(0, len(front), 10)]
-    middle = [middle[i : i + 10] for i in range(0, len(middle), 10)]
-    rear = [rear[i : i + 10] for i in range(0, len(rear), 10)]
+    front = [front[i: i + 10] for i in range(0, len(front), 10)]
+    middle = [middle[i: i + 10] for i in range(0, len(middle), 10)]
+    rear = [rear[i: i + 10] for i in range(0, len(rear), 10)]
 
     height = 125
     max_height = height
@@ -944,10 +1033,12 @@ def order_to_image(order, bot_name):
     image = Image.new("RGBA", (1080, max_height), "rgb(3, 5, 9)")
     draw = ImageDraw.Draw(image)
 
-    cloud = Image.open(MISC_PATH / "arena_cloud.png").resize((1096, 234)).rotate(180)
+    cloud = Image.open(
+        MISC_PATH / "arena_cloud.png").resize((1096, 234)).rotate(180)
     image.paste(cloud, (-16, 0), cloud)
 
-    trophy = Image.open(MISC_PATH / "trophy.png").resize((80, 80)).rotate(-20, expand=True)
+    trophy = Image.open(
+        MISC_PATH / "trophy.png").resize((80, 80)).rotate(-20, expand=True)
     image.paste(trophy, (970, 5), trophy)
 
     font = ImageFont.truetype(str(TOPPING_PATH / "font.otf"), size=64)
