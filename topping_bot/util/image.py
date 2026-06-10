@@ -12,142 +12,44 @@ from topping_bot.util.const import TMP_PATH, STATIC_PATH
 from topping_bot.util.utility import order_path
 
 TOPPING_PATH = STATIC_PATH / "topping"
+
+_BASE_TYPES = [Type.DMGRES, Type.ATK, Type.CD, Type.ATKSPD, Type.CRIT]
+
+RESONANCE_FOLDER = {
+    Resonance.MOONKISSED:      ("moonkissed",    _BASE_TYPES),
+    Resonance.TRIO:            ("trio",           _BASE_TYPES),
+    Resonance.DRACONIC:        ("draconic",       _BASE_TYPES),
+    Resonance.TROPICAL_ROCK:   ("tropical",       _BASE_TYPES),
+    Resonance.SEA_SALT:        ("sea",            _BASE_TYPES),
+    Resonance.RADIANT_CHEESE:  ("cheese",         _BASE_TYPES),
+    Resonance.FROSTED_CRYSTAL: ("crystal",        _BASE_TYPES),
+    Resonance.LIFESPROUTING:   ("life-sprouting", _BASE_TYPES),
+    Resonance.DESTRUCTIVE:     ("destructive",    _BASE_TYPES),
+    Resonance.FRAGRANT:        ("fragrant",       _BASE_TYPES),
+    Resonance.IRIS_GEM:        ("iris",           _BASE_TYPES),
+    Resonance.DECEITFUL:       ("deceitful",      _BASE_TYPES),
+    Resonance.TRUTHFUL:        ("truthful",       _BASE_TYPES),
+    Resonance.SACRED_VOW:      ("sacred",         _BASE_TYPES),
+    Resonance.FLAMING:         ("flaming",        _BASE_TYPES),
+    Resonance.INDOLENT:        ("indolent",       _BASE_TYPES),
+    Resonance.PASSIONATE:      ("passionate",     _BASE_TYPES),
+    Resonance.FUZZY_WUZZY:     ("fuzzy_wuzzy",    _BASE_TYPES),
+    Resonance.SEAFARER:        ("seafarer",       _BASE_TYPES),
+}
+
 TOPPINGS = {
     Resonance.NORMAL: {
-        Type.DMGRES: Image.open(TOPPING_PATH / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-        Type.HP: Image.open(TOPPING_PATH / f"{INFO[Type.HP]['filename']}.png").resize((101, 148)),
-        Type.BUFF: Image.open(TOPPING_PATH / f"{INFO[Type.BUFF]['filename']}.png").resize((101, 148)),
-        Type.DEF: Image.open(TOPPING_PATH / f"{INFO[Type.DEF]['filename']}.png").resize((101, 148)),
-        Type.BUFFRES: Image.open(TOPPING_PATH / f"{INFO[Type.BUFFRES]['filename']}.png").resize((101, 148)),
-        Type.CRITRES: Image.open(TOPPING_PATH / f"{INFO[Type.CRITRES]['filename']}.png").resize((101, 148)),
+        t: Image.open(TOPPING_PATH / f"{INFO[t]['filename']}.png").resize((101, 148))
+        for t in [Type.DMGRES, Type.ATK, Type.CD, Type.ATKSPD, Type.CRIT,
+                  Type.HP, Type.BUFF, Type.DEF, Type.BUFFRES, Type.CRITRES]
     },
-    Resonance.MOONKISSED: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "moonkissed" / f"{INFO[Type.DMGRES]['filename']}.png").resize(
-            (101, 148)
-        ),
-        Type.ATK: Image.open(TOPPING_PATH / "moonkissed" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "moonkissed" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "moonkissed" / f"{INFO[Type.ATKSPD]['filename']}.png").resize(
-            (101, 148)
-        ),
-        Type.CRIT: Image.open(TOPPING_PATH / "moonkissed" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
+    **{
+        resonance: {
+            t: Image.open(TOPPING_PATH / folder / f"{INFO[t]['filename']}.png").resize((101, 148))
+            for t in types
+        }
+        for resonance, (folder, types) in RESONANCE_FOLDER.items()
     },
-    Resonance.TRIO: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "trio" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "trio" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "trio" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "trio" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "trio" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.DRACONIC: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "draconic" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "draconic" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "draconic" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "draconic" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "draconic" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.TROPICAL_ROCK: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "tropical" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "tropical" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "tropical" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "tropical" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "tropical" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.SEA_SALT: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "sea" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "sea" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "sea" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "sea" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "sea" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.RADIANT_CHEESE: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "cheese" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "cheese" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "cheese" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "cheese" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "cheese" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.FROSTED_CRYSTAL: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "crystal" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "crystal" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "crystal" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "crystal" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "crystal" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.LIFESPROUTING: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "life-sprouting" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "life-sprouting" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "life-sprouting" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "life-sprouting" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "life-sprouting" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.DESTRUCTIVE: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "destructive" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "destructive" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "destructive" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "destructive" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "destructive" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.FRAGRANT: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "fragrant" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "fragrant" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "fragrant" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "fragrant" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "fragrant" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.IRIS_GEM: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "iris" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "iris" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "iris" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "iris" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "iris" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.DECEITFUL: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "deceitful" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "deceitful" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "deceitful" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "deceitful" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "deceitful" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.TRUTHFUL: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "truthful" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "truthful" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "truthful" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "truthful" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "truthful" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.SACRED_VOW: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "sacred" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "sacred" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "sacred" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "sacred" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "sacred" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.FLAMING: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "flaming" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "flaming" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "flaming" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "flaming" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "flaming" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.INDOLENT: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "indolent" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "indolent" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "indolent" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "indolent" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "indolent" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    },
-    Resonance.PASSIONATE: {
-        Type.DMGRES: Image.open(TOPPING_PATH / "passionate" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
-        Type.ATK: Image.open(TOPPING_PATH / "passionate" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
-        Type.CD: Image.open(TOPPING_PATH / "passionate" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
-        Type.ATKSPD: Image.open(TOPPING_PATH / "passionate" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
-        Type.CRIT: Image.open(TOPPING_PATH / "passionate" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
-    }
 }
 STATIC = {
     "font": ImageFont.truetype(str(TOPPING_PATH / "font.otf"), size=38),
