@@ -27,6 +27,7 @@ class Resonance(Enum):
     SEAFARER = "Seafarer"
     DESTINED = "Destined"
     SILENT = "Silent"
+    ANCIENT_ROOT = "Ancient Root"
     BLOOMING = "Blooming"
     CHRONO = "Chrono"
     CROSSED_FATES = "Crossed Fates"

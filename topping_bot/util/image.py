@@ -39,6 +39,7 @@ RESONANCE_FOLDER = {
     Resonance.SEAFARER:        ("seafarer",       _RESO_TYPES),
     Resonance.DESTINED:          ("destined",          _ALL_BASE_TYPES),
     Resonance.SILENT:            ("silent",            _ALL_BASE_TYPES),
+    Resonance.ANCIENT_ROOT:    ("ancient_root",      _RESO_TYPES),
     Resonance.BLOOMING:          ("blooming",          _ALL_BASE_TYPES),
     Resonance.CHRONO:            ("chrono",            _ALL_BASE_TYPES),
     Resonance.CROSSED_FATES:     ("crossed_fates",     _ALL_BASE_TYPES),
