@@ -25,6 +25,18 @@ class Resonance(Enum):
     PASSIONATE = "Passionate"
     FUZZY_WUZZY = "Fuzzy Wuzzy"
     SEAFARER = "Seafarer"
+    DESTINED = "Destined"
+    SILENT = "Silent"
+    ANCIENT_ROOT = "Ancient Root"
+    BLOOMING = "Blooming"
+    CHRONO = "Chrono"
+    CROSSED_FATES = "Crossed Fates"
+    GAMBIT = "Gambit"
+    LIFE_ENERGY = "Life Energy"
+    LOOMING_DARK = "Looming Dark"
+    RESEARCH_DRIVEN = "Research-driven"
+    UNISON = "Unison"
+    VERDIGRIS = "Verdigris"
 
 class Type(Enum):
     # in-game substats
