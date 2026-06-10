@@ -38,6 +38,7 @@ RESONANCE_FOLDER = {
     Resonance.FUZZY_WUZZY:     ("fuzzy_wuzzy",    _RESO_TYPES),
     Resonance.SEAFARER:        ("seafarer",       _RESO_TYPES),
     Resonance.DESTINED:        ("destined",       _ALL_BASE_TYPES),
+    Resonance.SILENT:          ("silent",         _ALL_BASE_TYPES),
 }
 
 TOPPINGS = {

@@ -26,6 +26,7 @@ class Resonance(Enum):
     FUZZY_WUZZY = "Fuzzy Wuzzy"
     SEAFARER = "Seafarer"
     DESTINED = "Destined"
+    SILENT = "Silent"
 
 class Type(Enum):
     # in-game substats
