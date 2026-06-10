@@ -23,7 +23,8 @@ class Resonance(Enum):
     FLAMING = "Flaming"
     INDOLENT = "Indolent"
     PASSIONATE = "Passionate"
-
+    FUZZY_WUZZY = "Fuzzy Wuzzy"
+    SEAFARER = "Seafarer"
 
 class Type(Enum):
     # in-game substats

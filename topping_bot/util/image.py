@@ -147,6 +147,20 @@ TOPPINGS = {
         Type.CD: Image.open(TOPPING_PATH / "passionate" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
         Type.ATKSPD: Image.open(TOPPING_PATH / "passionate" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
         Type.CRIT: Image.open(TOPPING_PATH / "passionate" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
+    },
+    Resonance.FUZZY_WUZZY: {
+        Type.DMGRES: Image.open(TOPPING_PATH / "fuzzy_wuzzy" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
+        Type.ATK: Image.open(TOPPING_PATH / "fuzzy_wuzzy" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
+        Type.CD: Image.open(TOPPING_PATH / "fuzzy_wuzzy" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
+        Type.ATKSPD: Image.open(TOPPING_PATH / "fuzzy_wuzzy" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
+        Type.CRIT: Image.open(TOPPING_PATH / "fuzzy_wuzzy" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
+    },
+    Resonance.SEAFARER: {
+        Type.DMGRES: Image.open(TOPPING_PATH / "seafarer" / f"{INFO[Type.DMGRES]['filename']}.png").resize((101, 148)),
+        Type.ATK: Image.open(TOPPING_PATH / "seafarer" / f"{INFO[Type.ATK]['filename']}.png").resize((101, 148)),
+        Type.CD: Image.open(TOPPING_PATH / "seafarer" / f"{INFO[Type.CD]['filename']}.png").resize((101, 148)),
+        Type.ATKSPD: Image.open(TOPPING_PATH / "seafarer" / f"{INFO[Type.ATKSPD]['filename']}.png").resize((101, 148)),
+        Type.CRIT: Image.open(TOPPING_PATH / "seafarer" / f"{INFO[Type.CRIT]['filename']}.png").resize((101, 148)),
     }
 }
 STATIC = {
